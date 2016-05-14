@@ -1,0 +1,35 @@
+{
+  "name": "copter-league",
+  "version": "0.1.0",
+  "description": "Meet and Contest with FPV-Racers",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bitfroest/CopterLeague.git"
+  },
+  "keywords": [
+    "Multicopter",
+    "Quadrocopter",
+    "FPV"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Bitfroest/CopterLeague/issues"
+  },
+  "homepage": "https://github.com/Bitfroest/CopterLeague#readme",
+  "dependencies": {
+    "compression": "1.6.2",
+    "express": "4.13.4",
+    "express-sequelize-session": "0.4.0",
+    "express-session": "1.13.0",
+    "passport": "0.3.2",
+    "passport-facebook": "2.1.0",
+    "pg": "4.5.5",
+    "pg-hstore": "2.3.2",
+    "sequelize": "3.23.1",
+    "serve-static": "1.10.2"
+  }
+}
