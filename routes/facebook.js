@@ -3,9 +3,8 @@ const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
 const config = require('../config');
 const instance = require('../models').instance;
-const common = require('./common');
 
-const User = instance.model('User');
+const Pilot = instance.model('Pilot');
 
 passport.use(new FacebookStrategy({
     clientID: config.facebook.clientID,
@@ -13,12 +12,12 @@ passport.use(new FacebookStrategy({
     callbackURL: config.origin + '/auth/facebook/callback',
     enableProof: true
 }, function(accessToken, refreshToken, profile, cb) {
-    User.findOrCreate({
+    Pilot.findOrCreate({
         where: {
             facebookId: profile.id
         },
         defaults: {
-            name: common.normalizeDisplayName(profile.displayName)
+            name: profile.displayName
         }
     }).spread(function(user, created) {
         cb(null, user);

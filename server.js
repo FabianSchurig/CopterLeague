@@ -1,6 +1,6 @@
 const path = require('path');
 const express = require('express');
-const serverStatic = require('serve-static');
+const serveStatic = require('serve-static');
 const compression = require('compression');
 const session = require('express-session');
 const Store = require('express-sequelize-session')(session.Store);
