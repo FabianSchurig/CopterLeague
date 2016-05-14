@@ -61,11 +61,10 @@ const Participation = instance.define('Participation', {
 Multi.belongsTo(Pilot, {foreignKey: {allowNull: false}, onDelete: 'CASCADE'});
 Pilot.hasMany(Multi);
 
-Participation.belongsTo(Event, {foreignKey: {allowNull: false}, onDelete: 'CASCADE'});
-Participation.belongsTo(Pilot, {foreignKey: {allowNull: false}, onDelete: 'CASCADE'});
+Pilot.belongsToMany(Event, {through: Participation});
+Event.belongsToMany(Pilot, {through: Participation});
 
 Result.belongsTo(Race, {foreignKey: {allowNull: false}, onDelete: 'CASCADE'});
-Result.belongsTo(Pilot, {foreignKey: {allowNull: false}, onDelete: 'CASCADE'});
 Result.belongsTo(Multi, {foreignKey: {allowNull: false}, onDelete: 'CASCADE'});
 
 Race.belongsTo(Event, {foreignKey: {allowNull: false}, onDelete: 'CASCADE'});
