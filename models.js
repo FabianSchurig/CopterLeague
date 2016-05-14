@@ -13,9 +13,9 @@ module.exports.instance = instance;
 const Pilot = instance.define('Pilot', {
     facebookId: {type: Sequelize.STRING, unique: true},
     googleId: {type: Sequelize.STRING, unique: true},
-    alias: {type: Sequelize.STRING, allowNull: false, validate: {len: [3, 40]}},
-    familyName: {type: Sequelize.STRING, allowNull: false, validate: {len: [3, 40]}},
-    firstName: {type: Sequelize.STRING, allowNull: false, validate: {len: [3, 40]}},
+    alias: {type: Sequelize.STRING, allowNull: false, validate: {len: [1, 40]}},
+    familyName: {type: Sequelize.STRING, allowNull: false, defaultValue: ''},
+    firstName: {type: Sequelize.STRING, allowNull: false, defaultValue: ''},
     email: {type: Sequelize.STRING, unique: true, validate: {isEmail: true}},
     telephone: {type: Sequelize.STRING},
     notes: {type: Sequelize.STRING},

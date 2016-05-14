@@ -17,7 +17,7 @@ passport.use(new FacebookStrategy({
             facebookId: profile.id
         },
         defaults: {
-            name: profile.displayName
+            alias: profile.displayName
         }
     }).spread(function(user, created) {
         cb(null, user);
