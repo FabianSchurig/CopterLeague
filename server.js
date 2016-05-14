@@ -13,7 +13,7 @@ const routes = require('./routes');
 initPassport();
 
 const app = express();
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 app.disable('x-powered-by');
 

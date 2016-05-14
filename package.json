@@ -29,6 +29,7 @@
     "passport-facebook": "2.1.0",
     "pg": "4.5.5",
     "pg-hstore": "2.3.2",
+    "pug": "^2.0.0-alpha7",
     "sequelize": "3.23.1",
     "serve-static": "1.10.2"
   }
