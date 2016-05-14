@@ -18,7 +18,7 @@ const Pilot = instance.define('Pilot', {
     firstName: {type: Sequelize.STRING, allowNull: false, defaultValue: ''},
     email: {type: Sequelize.STRING, unique: true, validate: {isEmail: true}},
     telephone: {type: Sequelize.STRING},
-    notes: {type: Sequelize.STRING},
+    notes: {type: Sequelize.TEXT, allowNull: false, defaultValue: ''},
     password: {type: Sequelize.STRING},
     emailConfirmed: {type: Sequelize.BOOLEAN},
     emailConfirmToken: {type: Sequelize.UUID, unique: true},
@@ -33,7 +33,7 @@ const Event = instance.define('Event', {
     maxParticipants: {type: Sequelize.INTEGER, validate: {min: 1}},
     location: {type: Sequelize.STRING},
     policy: {type: Sequelize.STRING},
-    notes: {type: Sequelize.STRING},
+    notes: {type: Sequelize.TEXT, allowNull: false, defaultValue: ''},
     isOfficial: {type: Sequelize.BOOLEAN}
 });
 
@@ -49,7 +49,7 @@ const Result = instance.define('Result', {
 const Multi = instance.define('Multi', {
     size: {type: Sequelize.STRING, allowNull: false},
     battery: {type: Sequelize.STRING, allowNull: false},
-    notes: {type: Sequelize.STRING}
+    notes: {type: Sequelize.TEXT, allowNull: false, defaultValue: ''}
 });
 
 const Participation = instance.define('Participation', {
