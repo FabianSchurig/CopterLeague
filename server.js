@@ -19,10 +19,7 @@ app.disable('x-powered-by');
 
 app.use(compression());
 app.use(serveStatic(path.join(__dirname, 'public')));
-app.use(serveStatic(path.join(__dirname, 'node_modules/@angular')));
-app.use(serveStatic(path.join(__dirname, 'node_modules/rxjs')));
-app.use(serveStatic(path.join(__dirname, 'node_modules/reflect-metadata')));
-app.use(serveStatic(path.join(__dirname, 'node_modules/zone.js')));
+app.use(serveStatic(path.join(__dirname, 'node_modules')));
 app.use(session({
     name: 'sid',
     secret: config.sessionSecret,
