@@ -4,6 +4,7 @@ import { HTTP_PROVIDERS }    from '@angular/http';
 
 import { PilotService } from './pilot.service';
 import { Pilot } from './pilot';
+import 'rxjs/Rx';
 
 @Component({
 	selector: 'my-pilots',
@@ -17,7 +18,7 @@ export class PilotsComponent implements OnInit {
 	constructor(private pilotService: PilotService, private router: Router) { }
 
 	getPilots() {
-		this.pilotService.getPilots().then(pilots => this.pilots = pilots);
+		this.pilotService.getPilots().subscribe(pilots => this.pilots = pilots);
 	}
 
 	ngOnInit() {
