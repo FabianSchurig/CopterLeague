@@ -1,6 +1,7 @@
 doctype html
 html(lang='de')
 	head
+		base(href='/')
 		link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css', integrity='sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7', crossorigin='anonymous')
 		link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css', integrity='sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r', crossorigin='anonymous')
 		link(rel='stylesheet', href='https://rawgit.com/lipis/bootstrap-social/gh-pages/bootstrap-social.css')
@@ -14,7 +15,6 @@ html(lang='de')
 		// import angular - custom modules
 		script(src='app.js')
 		// set custom style
-		base(href="/")
 		style
 			|body, html {height: 100%;}
 			|header {height: 100px;}
@@ -72,8 +72,6 @@ html(lang='de')
 		div.container
 			my-app
 				|Loading...
-			my-pilots
-				|Pilots loading...
 		div.container
 			hr
 			div.row

@@ -12,6 +12,6 @@ import { PilotService } from './pilot.service';
 })
 @RouteConfig([
   // {path: '/', redirectTo: ['Dashboard'] },
-  {path: '/p', name: 'Pilots', component: PilotsComponent, useAsDefault: true}
+  {path: '/pilots', name: 'Pilots', component: PilotsComponent, useAsDefault: true}
 ])
 export class AppComponent { }
