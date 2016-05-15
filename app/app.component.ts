@@ -7,7 +7,7 @@ import { PilotService } from './pilot.service';
 @Component({
   selector: 'my-app',
   templateUrl: 'app.component.pug',
-  directives: [ROUTER_DIRECTIVES],
+  directives: [ROUTER_DIRECTIVES, PilotsComponent],
   providers: [PilotService]
 })
 @RouteConfig([

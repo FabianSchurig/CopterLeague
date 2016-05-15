@@ -2,9 +2,7 @@ div
 	h2 Alle Piloten
 	ul
 		li(*ngFor='let pilot of pilots', [class.selected]='pilot === selectedPilot', (click)='onSelect(pilot)')
-			span
-				{{pilot.id}} {{pilot.alias}}
+			span {{pilot.id}} {{pilot.alias}}
 	div(*ngIf='selectedPilot')
-		h2
-			{{selectedPilot.alias | uppercase}} is my pilot
+		h2 {{selectedPilot.alias | uppercase}} is my pilot
 		button.btn.btn-default Test
