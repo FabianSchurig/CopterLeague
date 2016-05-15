@@ -1,5 +1,5 @@
 module.exports = function(app) {
     app.get('/me', function(req, res) {
-        res.json({a: 5});
+        res.redirect('/api/pilot/' + req.user.id);
     });
 };

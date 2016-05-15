@@ -69,3 +69,36 @@ Result.belongsTo(Multi, {foreignKey: {allowNull: false}, onDelete: 'CASCADE'});
 
 Race.belongsTo(Event, {foreignKey: {allowNull: false}, onDelete: 'CASCADE'});
 Event.hasMany(Race);
+
+// Scopes
+Pilot.addScope('public', {
+    attributes: ['id', 'alias', 'firstName', 'familyName', 'notes'],
+    include: [
+        {
+            model: Multi,
+            attributes: ['id', 'size', 'battery', 'notes']
+        },
+        {
+            model: Event,
+            attributes: ['id', 'title', 'location', 'date'],
+            through: {
+                model: Participation,
+                attributes: ['isCreator']
+            }
+        }
+    ]
+});
+
+Event.addScope('public', {
+    attributes: ['id', 'date', 'deadline', 'title'],
+    include: [
+        {
+            model: Pilot,
+            attributes: ['id', 'alias'],
+            through: {
+                model: Participation,
+                attributes: ['isCreator']
+            }
+        }
+    ]
+});
