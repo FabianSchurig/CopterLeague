@@ -29,7 +29,7 @@ const Event = instance.define('Event', {
     date: {type: Sequelize.DATE, allowNull: false},
     deadline: {type: Sequelize.DATE, allowNull: false},
     title: {type: Sequelize.STRING, allowNull: false, validate: {len: [3, 40]}},
-    isCancelled: {type: Sequelize.BOOLEAN , allowNull: false},
+    isCancelled: {type: Sequelize.BOOLEAN , allowNull: false, defaultValue: false},
     maxParticipants: {type: Sequelize.INTEGER, validate: {min: 1}},
     location: {type: Sequelize.STRING},
     policy: {type: Sequelize.STRING},
@@ -38,8 +38,8 @@ const Event = instance.define('Event', {
 });
 
 const Race = instance.define('Race', {
-    sizeMulti: {type: Sequelize.STRING, allowNull: false},
-    battery: {type: Sequelize.STRING, allowNull: false}
+    sizeMulti: {type: Sequelize.INTEGER, allowNull: false},
+    battery: {type: Sequelize.INTEGER, allowNull: false}
 });
 
 const Result = instance.define('Result', {
@@ -47,8 +47,8 @@ const Result = instance.define('Result', {
 });
 
 const Multi = instance.define('Multi', {
-    size: {type: Sequelize.STRING, allowNull: false},
-    battery: {type: Sequelize.STRING, allowNull: false},
+    size: {type: Sequelize.INTEGER, allowNull: false},
+    battery: {type: Sequelize.INTEGER, allowNull: false},
     notes: {type: Sequelize.TEXT, allowNull: false, defaultValue: ''}
 });
 
