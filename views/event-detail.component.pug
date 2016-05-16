@@ -1,13 +1,39 @@
-div
+div( *ngIf='event')
 	h2 {{event.title}}
 	div
 		label #ID
-		| {{event.id}}
+		span {{event.id}}
 	div
 		label Datum
-		| {{event.date}}
+		span {{event.date}}
 	div
 		label Deadline
-		| {{event.deadline}}
+		span {{event.deadline}}
+	div
+		label ist Abgesagt?
+		span {{event.isCancelled}}
+	div
+		label max Teilnehmer
+		span {{event.maxParticipants}}
+	div
+		label Ort
+		span {{event.location}}
+	div
+		label Regelwerk
+		span {{event.policy}}
+	div
+		label Beschreibung
+		span {{event.notes}}
+	div
+		label length
+		span {{event.participants.length}}
+	table.table
+		tr
+			td ID
+			td Alias
+		tr( *ngFor='#pilot of event.participants')
+			td {{pilot.id}}
+			td {{pilot.alias}}
+	
 	div
 		button.btn.btn-info( (click)='goBack()' ) Zurück

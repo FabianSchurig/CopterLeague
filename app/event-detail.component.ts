@@ -16,10 +16,14 @@ export class EventDetailComponent implements OnInit {
 	constructor(private eventService: EventService,
 		private routeParams: RouteParams) {
 	}
+	
+	getEvent() {
+		let id = +this.routeParams.get('id');
+		this.eventService.getEvent(id).subscribe(event => this.event = event, error =>  this.errorMessage = <any>error);
+	}
 
 	ngOnInit() {
-		let id = +this.routeParams.get('id');
-		this.eventService.getEvent(id).subscribe(event => this.event = event);
+		this.getEvent();
 	}
 
 	goBack() {

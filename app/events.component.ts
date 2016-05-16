@@ -10,7 +10,7 @@ import 'rxjs/Rx';
 @Component({
 	selector: 'my-events',
 	templateUrl: 'events.component.pug',
-	directives: [EventDetailComponent]
+	directives: [EventDetailComponent],
 	providers: [EventService]
 })
 export class EventsComponent implements OnInit {
