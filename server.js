@@ -6,6 +6,7 @@ const session = require('express-session');
 const Store = require('express-sequelize-session')(session.Store);
 const passport = require('passport');
 const bodyParser = require('body-parser');
+const expressValidator = require('express-validator');
 const config = require('./config');
 const instance = require('./models').instance;
 const initPassport = require('./misc/passport.js');
@@ -22,6 +23,7 @@ app.use(compression());
 app.use(serveStatic(path.join(__dirname, 'public')));
 app.use(serveStatic(path.join(__dirname, 'node_modules')));
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(expressValidator());
 app.use(session({
     name: 'sid',
     secret: config.sessionSecret,
