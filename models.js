@@ -88,17 +88,3 @@ Pilot.addScope('public', {
         }
     ]
 });
-
-Event.addScope('public', {
-    attributes: ['id', 'date', 'deadline', 'title'],
-    include: [
-        {
-            model: Pilot,
-            attributes: ['id', 'alias'],
-            through: {
-                model: Participation,
-                attributes: ['isCreator']
-            }
-        }
-    ]
-});

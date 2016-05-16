@@ -5,3 +5,4 @@ public/*.js
 public/*.map
 app/*.js
 app/*.js.map
+doc
