@@ -1,0 +1,19 @@
+div
+	div.panel.panel-default
+		div.panel-heading Events
+		table.table.table-hove
+			tr
+				td #
+				td Titel
+				td Anmeldeschluß
+				td Datum
+			
+			tr(*ngFor='let event of events', [class.selected]='event === selectedEvent', [class.info]='selectedEvent', (click)='onSelect(event)')
+				td {{event.id}}
+				td {{event.title}}
+				td {{event.deadline}}
+				td {{event.date}}
+			div(*ngIf='selectedEvent')
+				h2
+					| {{selectedEvent.alias | uppercase}} is my event
+				button.btn.btn-default( (click)='gotoDetail()' ) mehr..

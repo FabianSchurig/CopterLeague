@@ -1,0 +1,13 @@
+div
+	h2 {{event.title}}
+	div
+		label #ID
+		| {{event.id}}
+	div
+		label Datum
+		| {{event.date}}
+	div
+		label Deadline
+		| {{event.deadline}}
+	div
+		button.btn.btn-info( (click)='goBack()' ) Zurück

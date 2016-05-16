@@ -1,3 +1,40 @@
-h1 Test Angular 2 with pug
-h2 Test Component Pilots:
-my-pilots
+header
+	nav.navbar.navbar-default.navbar-fixed-top(role='navigation')
+		div.container-fluid
+			div.navbar-header
+				button.navbar-toggle.collapsed(type='button' data-toggle='collapse' data-target='.navbar-collapse')
+					span.sr-only Toggle navigation
+					span.icon-bar
+					span.icon-bar
+					span.icon-bar
+				a.navbar-brand(href='#') Copter League
+			div.collapse.navbar-collapse
+				ul.nav.navbar-nav
+					li
+						a([routerLink]='["Events"]') Veranstaltungen
+					li
+						a([routerLink]='["Pilots"]') Piloten
+					li
+						a(href='/') Registrieren
+
+				if !doNotShowNavbarLogin
+					div.nav-login#nav-login
+						a.btn.btn-social.btn-facebook.navbar-right.nav-space-r.nav-space-t(href="/auth/facebook")
+							i.fa.fa-facebook
+							span Login mit Facebook
+						a.btn.btn-social.btn-google.navbar-right.nav-space-r.nav-space-t(href="/auth/google")
+							i.fa.fa-google
+							span Login mit google
+						form.navbar-form.navbar-right(role='login', name='loginForm')
+							div.form-group
+								input(class='form-control nav-space-r', type='email', required='required', name='email', spellcheck='false', placeholder='jemand@bleistift.de')
+							div.form-group
+								input(class='form-control nav-space-r', type='password', required='required', ng-model='login.password', name='password', placeholder='Kennwort')
+							div.form-group
+								input(class='form-control', type='hidden', name='persistent', ng-model='login.persistent', value='1')
+							div.form-group
+								input(class='form-control', class='btn btn-primary' type='submit', ng-click='doLogin()', ng-disabled='loginForm.$invalid', value='Anmelden')
+div.container
+	h1 Test Angular 2
+	h2 Test Components:
+	router-outlet
