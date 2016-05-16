@@ -1,7 +1,7 @@
 div
 	div.panel.panel-default
 		div.panel-heading Piloten
-		table.table.table-hove
+		table.table.table-hover
 			tr
 				td #
 				td Alias
@@ -18,4 +18,4 @@ div
 			div(*ngIf='selectedPilot')
 				h2
 					| {{selectedPilot.alias | uppercase}} is my pilot
-				button.btn.btn-default mehr..
+				button.btn.btn-default( (click)='gotoDetail()' ) mehr..

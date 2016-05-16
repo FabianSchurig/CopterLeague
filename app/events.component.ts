@@ -7,11 +7,14 @@ import { EventDetailComponent } from './event-detail.component';
 import { Event } from './event';
 import 'rxjs/Rx';
 
+import { Iso8601ToDatePipe } from './iso8601.pipe';
+
 @Component({
 	selector: 'my-events',
 	templateUrl: 'events.component.pug',
 	directives: [EventDetailComponent],
-	providers: [EventService]
+	providers: [EventService],
+	pipes: [Iso8601ToDatePipe]
 })
 export class EventsComponent implements OnInit {
 	events: Event[];

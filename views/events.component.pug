@@ -11,8 +11,8 @@ div
 			tr(*ngFor='let event of events', [class.selected]='event === selectedEvent', [class.info]='selectedEvent', (click)='onSelect(event)')
 				td {{event.id}}
 				td {{event.title}}
-				td {{event.deadline}}
-				td {{event.date}}
+				td {{event.deadline | iso8601ToDate }}
+				td {{event.date | iso8601ToDate }}
 			div(*ngIf='selectedEvent')
 				h2
 					| {{selectedEvent.alias | uppercase}} is my event

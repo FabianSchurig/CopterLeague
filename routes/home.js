@@ -14,4 +14,7 @@ module.exports = function(app) {
 	app.get('/event-detail.component.pug', function(req, res) {
 	res.render('event-detail.component.pug', { title: 'Hey', message: 'Hello there!'});
 	});
+	app.get('/pilot-detail.component.pug', function(req, res) {
+	res.render('pilot-detail.component.pug', { title: 'Hey', message: 'Hello there!'});
+	});
 };
