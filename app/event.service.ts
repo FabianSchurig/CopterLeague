@@ -1,5 +1,5 @@
 import { Injectable }     from '@angular/core';
-import { Http, Response, RequestOptions } from '@angular/http';
+import { Http, Response, RequestOptions, Headers } from '@angular/http';
 
 import { Event }          from './event';
 import { Observable }     from 'rxjs/Observable';
@@ -14,7 +14,7 @@ export class EventService {
 	addEvent(data: Object): Observable<Event> {
 		let body = 'title=' + data.title + '&date=' + data.date;
 		//let body = JSON.stringify({data});
-		let headers = new Headers({ 'Content-Type': 'application/json' });
+		let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
 		let options = new RequestOptions({ headers: headers });
 
 		return this.http.post(this.eventsUrl, body, options)
