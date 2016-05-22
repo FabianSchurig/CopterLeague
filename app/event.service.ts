@@ -12,8 +12,11 @@ export class EventService {
 	private eventsUrl = 'api/event';  // URL to web API
 
 	addEvent(data: Object): Observable<Event> {
-		let body = 'title=' + data.title + '&date=' + data.date;
-		//let body = JSON.stringify({data});
+		let body = '';
+		// parse JSON data to x-www-form-urlencoded
+		for (let key in data) {
+			body += encodeURIComponent(key)+'='+encodeURIComponent(data[key])+'&';
+		}
 		let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
 		let options = new RequestOptions({ headers: headers });
 
