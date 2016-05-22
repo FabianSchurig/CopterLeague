@@ -1,39 +1,52 @@
 div( *ngIf='event')
-	h2 {{event.title}}
-	div
-		label #ID
-		span {{event.id}}
-	div
-		label Datum
-		span {{event.date}}
-	div
-		label Deadline
-		span {{event.deadline}}
-	div
-		label ist Abgesagt?
-		span {{event.isCancelled}}
-	div
-		label max Teilnehmer
-		span {{event.maxParticipants}}
-	div
-		label Ort
-		span {{event.location}}
-	div
-		label Regelwerk
-		span {{event.policy}}
-	div
-		label Beschreibung
-		span {{event.notes}}
-	div
-		label length
-		span {{event.participants.length}}
-	table.table
-		tr
-			td ID
-			td Alias
-		tr( *ngFor='#pilot of event.participants')
-			td {{pilot.id}}
-			td {{pilot.alias}}
-	
+	div([hidden]='submitted')
+		form(*ngIf='active', (ngSubmit)='onSubmit()', #eventForm='ngForm')
+			div.form-group
+				label(for='title') Titel
+				input.form-control(type='text' required [(ngModel)]='event.data.title', ngControl='title', #title='ngForm')
+				div.alert.alert-danger([hidden]='title.valid || title.pristine') Titel wird benötigt
+			div.form-group
+				label(for='date') Datum
+				input.form-control(type='text' required [(ngModel)]='event.data.date', ngControl='date', #date='ngForm')
+				div.alert.alert-danger([hidden]='date.valid || date.pristine') Datum wird benötigt
+			button.btn.btn-default(type='submit', [disabled]='!eventForm.form.valid') Bestätigen
+			button.btn.btn-default(type='button', (click)='newEvent()') Neu
+	div([hidden]='!submitted')
+		h2 {{event.data.title}}
+		div
+			label #ID
+			span {{event.data.id}}
+		div
+			label Datum
+			span {{event.data.date}}
+		div
+			label Deadline
+			span {{event.data.deadline}}
+		div
+			label ist Abgesagt?
+			span {{event.data.isCancelled}}
+		div
+			label max Teilnehmer
+			span {{event.data.maxParticipants}}
+		div
+			label Ort
+			span {{event.data.location}}
+		div
+			label Regelwerk
+			span {{event.data.policy}}
+		div
+			label Beschreibung
+			span {{event.data.notes}}
+		div
+			label length
+			span {{event.data.participants?.length}}
+		table.table
+			tr
+				td ID
+				td Alias
+			tr( *ngFor='#pilot of event.data?.participants')
+				td {{pilot.id}}
+				td {{pilot.alias}}
+		button.btn.btn-default( (click)='submitted=false' ) Bearbeiten
 	div
 		button.btn.btn-info( (click)='goBack()' ) Zurück

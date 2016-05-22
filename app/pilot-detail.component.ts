@@ -6,9 +6,12 @@ import { Pilot } from './pilot';
 import { PilotService } from './pilot.service';
 import 'rxjs/Rx';
 
+import { Iso8601ToDatePipe } from './iso8601.pipe';
+
 @Component({
 	selector: 'my-pilot-detail',
-	templateUrl: 'pilot-detail.component.pug'
+	templateUrl: 'pilot-detail.component.pug',
+	pipes: [Iso8601ToDatePipe]
 })
 export class PilotDetailComponent implements OnInit {
 	pilot: Pilot;

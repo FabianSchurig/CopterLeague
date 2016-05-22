@@ -49,7 +49,7 @@ div( *ngIf='pilot')
 		tr( *ngFor='#event of pilot.Events')
 			td {{event.id}}
 			td {{event.title}}
-			td {{event.date | date }}
+			td {{event.date | iso8601ToDate }}
 	
 	div
 		button.btn.btn-info( (click)='goBack()' ) Zurück

@@ -1,6 +1,6 @@
 export class Event {
-	id: number;
-	title: string;
-	deadline: string;
-	date: string;
+	constructor(
+		public data: Object
+	) { }
+		
 }

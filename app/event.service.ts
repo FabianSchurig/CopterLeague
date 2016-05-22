@@ -1,5 +1,5 @@
 import { Injectable }     from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Response, RequestOptions } from '@angular/http';
 
 import { Event }          from './event';
 import { Observable }     from 'rxjs/Observable';
@@ -11,6 +11,16 @@ export class EventService {
 
 	private eventsUrl = 'api/event';  // URL to web API
 
+	addEvent(data: Object): Observable<Event> {
+		let body = 'title=' + data.title + '&date=' + data.date;
+		//let body = JSON.stringify({data});
+		let headers = new Headers({ 'Content-Type': 'application/json' });
+		let options = new RequestOptions({ headers: headers });
+
+		return this.http.post(this.eventsUrl, body, options)
+						.map(this.extractData)
+						.catch(this.handleError);
+	}
 	getEvents (): Observable<Event[]> {
 		console.log('getEvents');
 		return this.http.get(this.eventsUrl)
@@ -21,7 +31,7 @@ export class EventService {
 		return this.http.get(this.eventsUrl + '/'+id)
 					.map(this.extractData)
 					.catch(this.handleError);
-	}
+	}	
 	private extractData(res: Response) {
 		if (res.status < 200 || res.status >= 300) {
 			throw new Error('Response status: ' + res.status);
