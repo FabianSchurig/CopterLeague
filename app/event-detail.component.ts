@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { RouteParams } from '@angular/router-deprecated';
+import { Component, OnInit, Input, Output, EventEmitter  } from '@angular/core';
+import { Router, RouteParams, RouteSegment } from '@angular/router-deprecated';
 import { HTTP_PROVIDERS }    from '@angular/http';
 import { NgForm }    from '@angular/common';
 
@@ -13,19 +13,24 @@ import * as moment from 'moment';
 	templateUrl: 'event-detail.component.pug'
 })
 export class EventDetailComponent implements OnInit {
-	event: Event;
+	@Input() event: Event;
+	@Output() close = new EventEmitter();
+	error: any;
+	navigated: false;
 	submitted = false;
 	active = true;
 	isNew = false;
 	
+	constructor(
+		private _routeParams: RouteParams,
+		private _eventService: EventService,
+		private router: Router){
+	}
+	
 	
 	onSubmit() {
 		this.submitted = true;
-		if(this.isNew){
-			this.addEvent(this.event.data);
-			// TODO: route to new event data id
-			this.isNew = false;
-		}
+		this.save();
 	}
 
 	get diagnostic() { return JSON.stringify(this.event); }
@@ -41,32 +46,38 @@ export class EventDetailComponent implements OnInit {
 		setTimeout(()=> this.active=true, 0);
 	}
 	
-	addEvent(data: Object) {
-		if (!data) { return; }
-		this.eventService.addEvent(data)
-						.subscribe(
-							event  => this.event.data.id = event.data.id,
-							error => this.errorMessage = <any>error);
-	}
-	
-	constructor(private eventService: EventService,
-		private routeParams: RouteParams) {
-	}
-	
-	getEventById(id: number){
-		this.eventService.getEvent(id).subscribe(event => this.event = event, error =>  this.errorMessage = <any>error);
-	}
-	
-	getEvent() {
-		let id = +this.routeParams.get('id');
-		this.eventService.getEvent(id).subscribe(event => this.event = event, error =>  this.errorMessage = <any>error);
+	getEvent(id: number) {
+		this._eventService.getEvent(id).subscribe(event => this.event = event, error =>  this.errorMessage = <any>error);
 	}
 
 	ngOnInit() {
-		this.getEvent();
+		if(this._routeParams.get('id') !== null){
+			let id = +this._routeParams.get('id');
+			this.navigated = true;
+			this._eventService.getEvent(id).subscribe(event => this.event = event, error => this.errorMessage = <any>error);
+		} else {
+			this.newEvent();
+		}
+	}
+	
+	save() {
+		this._eventService
+			.save(this.event)
+			.subscribe(event => {
+				this.event.data.id = event.data.id;
+				this.gotoSaved(this.event.data.id);}
+				, error => this.errorMessage = <any>error);
+			
+	}
+	
+	gotoSaved(id: number){
+		this.router.navigate(['EventDetail', { id: id }]);
 	}
 
-	goBack() {
-		window.history.back();
+	goBack(savedEvent: Event = null) {
+		this.close.emit(savedEvent);
+		if (this.navigated) {
+			window.history.back();
+		}
 	}
 }

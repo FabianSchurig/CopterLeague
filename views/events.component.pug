@@ -10,10 +10,11 @@ div( *ngIf='events')
 						p EventID {{event.id}}
 						p Anmeldeschluß {{event.deadline | iso8601ToDate }}
 						p Datum {{event.date | iso8601ToDate }}
-						button.btn.btn-info.btn-bottom-right( (click)='gotoDetail()' ) mehr Details ..
+						button.btn.btn-info.btn-bottom-right( *ngIf='selectedEvent', (click)='gotoDetail()' ) Details ..
 					div.col-md-6
 						div.panel-location(style='background-image: url(https://maps.googleapis.com/maps/api/staticmap?center=49.351420,7.261736&zoom=15&size=500x300&key=AIzaSyDv8f6roSx7xY5FS-Xb4tjTkGgG5PD9g00)')
-		div(*ngIf='selectedEvent')
-			h2
-				| {{selectedEvent.alias | uppercase}} is my event
-			button.btn.btn-default( (click)='gotoDetail()' ) mehr..
+	div.row
+		div.col-md-12
+			button.btn.btn-default( (click)='addEvent()' ) Neue Veranstaltung
+			div( *ngIf='newEvent')
+				my-event-detail( (close)='close($event)' )

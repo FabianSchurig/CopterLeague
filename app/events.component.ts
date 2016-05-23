@@ -19,11 +19,22 @@ import { Iso8601ToDatePipe } from './iso8601.pipe';
 export class EventsComponent implements OnInit {
 	events: Event[];
 	selectedEvent: Event;
-
+	newEvent = false;
+	
 	constructor(private eventService: EventService, private router: Router) { }
 
 	getEvents() {
 		this.eventService.getEvents().subscribe(events => this.events = events);
+	}
+	
+	addEvent() {
+		this.newEvent = true;
+		this.selectedEvent = null;
+	}
+	
+	close(savedEvent: Event){
+		this.newEvent = false;
+		if (savedEvent) {this.getEvents();}
 	}
 	
 	gotoDetail() {
@@ -34,5 +45,8 @@ export class EventsComponent implements OnInit {
 		this.getEvents();
 	}
 
-	onSelect(event: Event) { this.selectedEvent = event; }
+	onSelect(event: Event) { 
+		this.selectedEvent = event;
+		this.newEvent = false;
+	}
 }

@@ -9,8 +9,7 @@ div( *ngIf='event')
 				label(for='date') Datum
 				input.form-control(type='text' required [(ngModel)]='event.data.date', ngControl='date', #date='ngForm')
 				div.alert.alert-danger([hidden]='date.valid || date.pristine') Datum wird benötigt
-			button.btn.btn-default(type='submit', [disabled]='!eventForm.form.valid') Bestätigen
-			button.btn.btn-default(type='button', (click)='newEvent()') Neu
+			button.btn.btn-default(type='submit', [disabled]='!eventForm.form.valid') Speichern
 	div([hidden]='!submitted')
 		h2 {{event.data.title}}
 		div
