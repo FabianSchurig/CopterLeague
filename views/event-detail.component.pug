@@ -46,6 +46,6 @@ div( *ngIf='event')
 			tr( *ngFor='#pilot of event.data?.participants')
 				td {{pilot.id}}
 				td {{pilot.alias}}
-		button.btn.btn-default( (click)='submitted=false' ) Bearbeiten
+		button.btn.btn-default( (click)='submitted=true' ) Bearbeiten
 	div
 		button.btn.btn-info( (click)='goBack()' ) Zurück
