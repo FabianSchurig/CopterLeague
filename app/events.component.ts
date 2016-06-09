@@ -40,6 +40,10 @@ export class EventsComponent implements OnInit {
 	gotoDetail() {
 		this.router.navigate(['EventDetail', { id: this.selectedEvent.id }]);
 	}
+	
+	getLocationLink(event: Event){
+		return "https://maps.googleapis.com/maps/api/staticmap?center="+ event.location +"&zoom=15&size=500x300&key=AIzaSyDv8f6roSx7xY5FS-Xb4tjTkGgG5PD9g00";
+	}
 
 	ngOnInit() {
 		this.getEvents();

@@ -1,5 +1,5 @@
 div( *ngIf='event')
-	div([hidden]='submitted')
+	div([hidden]='!submitted')
 		form(*ngIf='active', (ngSubmit)='onSubmit()', #eventForm='ngForm')
 			div.form-group
 				label(for='title') Titel
@@ -10,7 +10,7 @@ div( *ngIf='event')
 				input.form-control(type='text' required [(ngModel)]='event.data.date', ngControl='date', #date='ngForm')
 				div.alert.alert-danger([hidden]='date.valid || date.pristine') Datum wird benötigt
 			button.btn.btn-default(type='submit', [disabled]='!eventForm.form.valid') Speichern
-	div([hidden]='!submitted')
+	div([hidden]='submitted')
 		h2 {{event.data.title}}
 		div
 			label #ID

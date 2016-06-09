@@ -1,18 +1,20 @@
 div( *ngIf='events')
 	h2 Veranstaltungen in Deutschland
-	div.row(*ngFor='let event of events.data', [class.selected]='event === selectedEvent', [class.info]='selectedEvent', (click)='onSelect(event)')
+	div.row(*ngFor='let event of events.data')
 		div.col-md-12
 			div.panel.panel-default.panel-profile.m-b-0
-				div.panel-heading(style='background-image: url(placeholder.png)')
+				div.panel-heading.height-300(style='background-image: url(placeholder.png)')
 				div.panel-body
 					div.col-md-6.height-300
 						h1.panel-title {{event.title}}
 						p EventID {{event.id}}
 						p Anmeldeschluß {{event.deadline | iso8601ToDate }}
 						p Datum {{event.date | iso8601ToDate }}
-						button.btn.btn-info.btn-bottom-right( *ngIf='selectedEvent', (click)='gotoDetail()' ) Details ..
+						button.btn.btn-info.btn-bottom-right( (click)='onSelect(event);gotoDetail();' ) Details ..
 					div.col-md-6
-						div.panel-location(style='background-image: url(https://maps.googleapis.com/maps/api/staticmap?center=49.351420,7.261736&zoom=15&size=500x300&key=AIzaSyDv8f6roSx7xY5FS-Xb4tjTkGgG5PD9g00)')
+						div.panel-location( *ngIf='event.location')
+							img( src="{{getLocationLink(event)}}" )
+							
 	div.row
 		div.col-md-12
 			button.btn.btn-default( (click)='addEvent()' ) Neue Veranstaltung
