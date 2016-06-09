@@ -6,11 +6,18 @@ div( *ngIf='events')
 				div.panel-heading.height-300(style='background-image: url(placeholder.png)')
 				div.panel-body
 					div.col-md-6.height-300
-						h1.panel-title {{event.title}}
-						p EventID {{event.id}}
-						p Anmeldeschluß {{event.deadline | iso8601ToDate }}
-						p Datum {{event.date | iso8601ToDate }}
-						button.btn.btn-primary.btn-bottom-right( (click)='onSelect(event);gotoDetail();' ) Details ..
+						h2.panel-title {{event.title}}
+						div
+							label EventID 
+							span.pull-right {{event.id}}
+						div
+							label Anmeldeschluß 
+							span.pull-right {{event.deadline | iso8601ToDate }}
+						div
+							label Datum 
+							span.pull-right {{event.date | iso8601ToDate }}
+						button.btn.btn-success.btn-bottom Teilnehmen
+						button.btn.btn-primary.btn-bottom.btn-bottom-right( (click)='onSelect(event);gotoDetail();' ) Details ..
 					div.col-md-6
 						div.panel-location( *ngIf='event.location')
 							img( src="{{getLocationLink(event)}}" )

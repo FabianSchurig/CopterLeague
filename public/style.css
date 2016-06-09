@@ -34,8 +34,11 @@
 
 .btn-bottom-right {
     margin-right: 20px !important;
-	bottom: 0px;
 	right: 0px;
+}
+
+.btn-bottom {
+	bottom: 0px;
 	position: absolute;
 }
 
