@@ -8,9 +8,12 @@ import { EventService } from './event.service';
 import 'rxjs/Rx';
 import * as moment from 'moment';
 
+import { Iso8601ToDatePipe } from './iso8601.pipe';
+
 @Component({
 	selector: 'my-event-detail',
-	templateUrl: 'event-detail.component.pug'
+	templateUrl: 'event-detail.component.pug',
+	pipes: [Iso8601ToDatePipe]
 })
 export class EventDetailComponent implements OnInit {
 	@Input() event: Event;

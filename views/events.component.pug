@@ -10,7 +10,7 @@ div( *ngIf='events')
 						p EventID {{event.id}}
 						p Anmeldeschluß {{event.deadline | iso8601ToDate }}
 						p Datum {{event.date | iso8601ToDate }}
-						button.btn.btn-info.btn-bottom-right( (click)='onSelect(event);gotoDetail();' ) Details ..
+						button.btn.btn-primary.btn-bottom-right( (click)='onSelect(event);gotoDetail();' ) Details ..
 					div.col-md-6
 						div.panel-location( *ngIf='event.location')
 							img( src="{{getLocationLink(event)}}" )

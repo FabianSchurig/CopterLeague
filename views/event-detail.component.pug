@@ -11,34 +11,43 @@ div( *ngIf='event')
 				div.alert.alert-danger([hidden]='date.valid || date.pristine') Datum wird benötigt
 			button.btn.btn-default(type='submit', [disabled]='!eventForm.form.valid') Speichern
 	div([hidden]='submitted')
-		h2 {{event.data.title}}
-		div
-			label #ID
-			span {{event.data.id}}
-		div
-			label Datum
-			span {{event.data.date}}
-		div
-			label Deadline
-			span {{event.data.deadline}}
-		div
-			label ist Abgesagt?
-			span {{event.data.isCancelled}}
-		div
-			label max Teilnehmer
-			span {{event.data.maxParticipants}}
-		div
-			label Ort
-			span {{event.data.location}}
-		div
-			label Regelwerk
-			span {{event.data.policy}}
-		div
-			label Beschreibung
-			span {{event.data.notes}}
-		div
-			label length
-			span {{event.data.participants?.length}}
+		div.row
+			div.col-md-12
+				h2 {{event.data.title}}
+				img.img-centered(src='placeholder.png')
+		div.row
+			div.col-md-6
+				div.panel.panel-primary
+					div.panel-heading Informationen
+					div.panel-body
+						div
+							label #ID
+							span.pull-right {{event.data.id}}
+						div
+							label Datum
+							span.pull-right {{event.data.date | iso8601ToDate }}
+						div
+							label Deadline
+							span.pull-right {{event.data.deadline | iso8601ToDate }}
+						div
+							label Status
+							span.pull-right( *ngIf='event.data.isCancelled' ) Dieses Event wurde leider abgesagt.
+							span.pull-right( *ngIf='!event.data.isCancelled' ) Findet statt!
+						div
+							label Teilnehmer
+							span.pull-right {{event.data.participants?.length}} / {{event.data.maxParticipants}}
+			div.col-md-6
+				h4 Ort
+				span {{event.data.location}}
+		div.row
+			div.col-md-12
+				div
+					h3 Regelwerk
+					span {{event.data.policy}}
+				div
+					h3 Beschreibung
+					span {{event.data.notes}}
+		h3 Teilnehmer
 		table.table
 			tr
 				td ID
@@ -47,5 +56,4 @@ div( *ngIf='event')
 				td {{pilot.id}}
 				td {{pilot.alias}}
 		button.btn.btn-default( (click)='submitted=true' ) Bearbeiten
-	div
-		button.btn.btn-info( (click)='goBack()' ) Zurück
+		button.btn.btn-primary( (click)='goBack()' ) Zurück

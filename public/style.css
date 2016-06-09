@@ -84,12 +84,27 @@
 	margin-left: 35px;
 }
 
+.height-600 {
+	height: 600px;
+}
+
 .height-300 {
 	height: 300px;
 }
 
 .height-100 {
 	height: 100px;
+}
+
+.img-centered {
+	display: block;
+    margin-left: auto;
+    margin-right: auto;
+	width: 100%;
+}
+
+.pull-right {
+	float: right;
 }
 
 q {
@@ -104,3 +119,10 @@ q {
   border-left: 5px solid #a94442; /* red */
 }
 
+.nav-space-r {margin-right: 2px !important;}
+
+.nav-space-t {margin-top: 4px;}
+
+h1,h2,h3,h4,h5,h6 {
+	font-weight: initial;
+}
