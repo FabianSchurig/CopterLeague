@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "build": "webpack --config webpack.config.js",
+    "watch": "webpack --watch --config webpack.config.js",
     "doc": "apidoc -i routes/api"
   },
   "repository": {
