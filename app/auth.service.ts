@@ -26,7 +26,7 @@ export class AuthService {
 	}
 
 	logout() {
-		return this.http.get(this.config.serverUrl + '/api/auth/logout', {
+		return this.http.get('/api/auth/logout', {
 			headers: new Headers({'x-security-token': this.token})
 		}).map((res : any) => {
 			this.token = undefined;
