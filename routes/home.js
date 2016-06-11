@@ -20,4 +20,7 @@ module.exports = function(app) {
 	app.get('/pilot-detail.component.pug', function(req, res) {
 	res.render('pilot-detail.component.pug');
 	});
+	app.get('/login.component.pug', function(req, res) {
+	res.render('login.component.pug');
+	});
 };
