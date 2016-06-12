@@ -4,6 +4,7 @@ const auth = require('./auth');
 const bcrypt = require('bcryptjs');
 const bluebird = require('bluebird');
 const hashAsync = bluebird.promisify(bcrypt.hash);
+const token = require('./token');
 
 const BCRYPT_ROUNDS = 10;
 
@@ -45,11 +46,14 @@ module.exports = function(app) {
                 familyName: req.body.familyName
             });
         }).then(function(pilot) {
-            res.json({
-                status: 'success',
-                data: {
-                    id: pilot.id
-                }
+            return token.generate(pilot.id, false).then(function(token) {
+                res.json({
+                    status: 'success',
+                    data: {
+                        id: pilot.id,
+                        token
+                    }
+                });
             });
         }).catch(function(err) {
             console.log(err);

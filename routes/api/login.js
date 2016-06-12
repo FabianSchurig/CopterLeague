@@ -5,8 +5,7 @@ const Pilot = instance.model('Pilot');
 const bcrypt = require('bcryptjs');
 const bluebird = require('bluebird');
 const compareAsync = bluebird.promisify(bcrypt.compare);
-const jwt = require('jsonwebtoken');
-const signAsync = bluebird.promisify(jwt.sign);
+const token = require('./token');
 const config = require('../../config');
 
 passport.use(new LocalStrategy({
@@ -52,12 +51,7 @@ module.exports = function(app) {
      * @apiSuccess {String}   data.token Authorization Token
      */
     app.post('/auth/login', passport.authenticate('local', {session: false}), function(req, res) {
-        signAsync({
-            id: req.user.id
-        }, config.sessionSecret, {
-            algorithm: 'HS256',
-            expiresIn: '2d' // 2 days TODO: set to 1 day or 14 days according to parameter 'permanent'
-        }).then(function(token) {
+        token.generate(req.user.id, false).then(function(token) {
             res.json({
                 status: 'success',
                 data: {token, id: req.user.id}
