@@ -1,4 +1,4 @@
-ul.nav.navbar-nav
+ul.nav.navbar-nav(*ngIf='!loggedIn' )
 	li
 		a( (click)='open()' ) Registrieren
 modal( #modal="" )

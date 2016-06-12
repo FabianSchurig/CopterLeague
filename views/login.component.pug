@@ -1,7 +1,11 @@
-div( *ngIf='isLoggedin' )
-	div Angemeldet!
+div( *ngIf='loggedIn' )
+	ul.nav.navbar-nav.navbar-right
+		li
+			a( href='/#/pilot/detail/{{id}}' ) Mein Profil
+		li
+			a( (click)='onLogout()' ) Logout
 
-div( *ngIf='!isLoggedin' )
+div( *ngIf='!loggedIn' )
 	div.nav-login#nav-login
 		a.btn.btn-social.btn-facebook.navbar-right.nav-space-r.nav-space-t(href="/auth/facebook")
 			i.fa.fa-facebook

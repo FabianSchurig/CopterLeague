@@ -4,6 +4,7 @@ import { HTTP_PROVIDERS }    from '@angular/http';
 import { FORM_DIRECTIVES, FormBuilder, Validators, ControlGroup, NgIf } from '@angular/common';
 
 import { AuthService } from './auth.service';
+import { isLoggedin, pilotId } from './is-loggedin';
 import 'rxjs/Rx';
 
 
@@ -16,6 +17,9 @@ import 'rxjs/Rx';
 export class LoginComponent {
 	form: ControlGroup;
 	error: boolean = false;
+	loggedIn: boolean = isLoggedin();
+	id: number = pilotId();
+	
 	constructor(
 		fb: FormBuilder,
 		private auth: AuthService, 
@@ -26,12 +30,25 @@ export class LoginComponent {
 			password:	['', Validators.required]
 		});
 	}
+	
+	onLogout() {
+		this.auth.logout().subscribe((result) => {
+			if (result) {
+				this.router.navigate(['Events']);
+				console.log(isLoggedin());
+				console.log(pilotId());
+				this.loggedIn = isLoggedin();
+			}
+		} , () => { this.error = true; } );
+	}
 
 	onSubmit(email, password):void {
 		this.auth.login(email, password).subscribe((result) => {
 			if (result) {
 				this.router.navigate(['Events']);
-				//console.log(result);
+				console.log(isLoggedin());
+				this.loggedIn = isLoggedin();
+				this.id = pilotId();
 			}
 		} , () => { this.error = true; } );
 	}
