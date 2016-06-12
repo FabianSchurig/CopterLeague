@@ -17,18 +17,13 @@ export class AuthService {
 	login(email: String, password: String) {
 		let headers = new Headers();
 		headers.append('Content-Type', 'application/json');
-
+		console.log(email);
+		console.log(password);
 		return this.http.post('/api/auth/login', JSON.stringify({
-				email,
-				password
+				email: email, password: password
 			}), { headers })
 			.map(this.extractData)
 			.catch(this.handleError);
-				/*
-				let data = res.json();
-				this.token = data.token;
-				localStorage.setItem('token', this.token);
-				*/
 	}
 
 	logout() {
@@ -44,6 +39,8 @@ export class AuthService {
 			throw new Error('Response status: ' + res.status);
 		}
 		let body = res.json();
+		this.token = body.token;
+		localStorage.setItem('token', this.token);
 		console.log(body);
 		return body || [];
 	}

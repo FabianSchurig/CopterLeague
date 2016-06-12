@@ -27,7 +27,7 @@ export class LoginComponent {
 		});
 	}
 
-	onSubmit(email, password) {
+	onSubmit(email, password):void {
 		this.auth.login(email, password).subscribe((result) => {
 			if (result) {
 				this.router.navigate(['Events']);
