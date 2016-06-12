@@ -2,17 +2,29 @@ const path = require('path');
 const express = require('express');
 const serveStatic = require('serve-static');
 const compression = require('compression');
-const session = require('express-session');
-const Store = require('express-sequelize-session')(session.Store);
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
 const config = require('./config');
 const instance = require('./models').instance;
-const initPassport = require('./misc/passport.js');
 const routes = require('./routes');
+const jwt = require('jsonwebtoken');
+const bluebird = require('bluebird');
+const verifyAsync = bluebird.promisify(jwt.verify);
+const BearerStrategy = require('passport-http-bearer').Strategy;
+const Pilot = instance.model('Pilot');
 
-initPassport();
+passport.use(new BearerStrategy(function(token, done) {
+    verifyAsync(token, config.sessionSecret, {
+        algorithms: ['HS256']
+    }).then(function(decoded) {
+        return Pilot.findById(decoded.id);
+    }).then(function(user) {
+        done(null, user);
+    }).catch(function(err) {
+        done(err);
+    });
+}));
 
 const app = express();
 app.set('view engine', 'pug');
@@ -25,15 +37,7 @@ app.use(serveStatic(path.join(__dirname, 'node_modules')));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(expressValidator());
-app.use(session({
-    name: 'sid',
-    secret: config.sessionSecret,
-    store: new Store(instance),
-    resave: false,
-    saveUninitialized: true
-}));
 app.use(passport.initialize());
-app.use(passport.session());
 
 routes(app);
 
