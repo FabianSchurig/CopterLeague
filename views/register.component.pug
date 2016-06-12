@@ -2,7 +2,27 @@ ul.nav.navbar-nav
 	li
 		a( (click)='open()' ) Registrieren
 modal( #modal="" )
-	modal-header( [show-close]='true' )
-		h4.modal-title Test
-	modal-body Tralala
-	modal-footer( [show-default-buttons]='true' )
+	form( #registerForm='ngForm', (ngSubmit)='onSubmit()')
+		modal-header( [show-close]='true' )
+			h4.modal-title Registrieren
+		modal-body( *ngIf='pilot')
+			div.form-group
+				label(for='alias') Nickname
+				input.form-control(type='text' required [(ngModel)]='pilot.alias', ngControl='alias', #alias='ngForm')
+				div.alert.alert-danger([hidden]='alias.valid || alias.pristine') Nickname wird benötigt
+			div.form-group
+				label(for='email') E-Mail
+				input.form-control(type='text' required [(ngModel)]='pilot.email', ngControl='email', #email='ngForm')
+				div.alert.alert-danger([hidden]='email.valid || email.pristine') E-Mail wird benötigt
+			div.form-group
+				label(for='password') Passwort
+				input.form-control(type='password' required [(ngModel)]='pilot.password', ngControl='password', #password='ngForm')
+				div.alert.alert-danger([hidden]='password.valid || password.pristine') Passwort wird benötigt
+			div.form-group
+				label(for='firstName') Vorname
+				input.form-control(type='text', [(ngModel)]='pilot.firstName', ngControl='firstName', #firstName='ngForm')
+			div.form-group
+				label(for='familyName') Nachname
+				input.form-control(type='text', [(ngModel)]='pilot.familyName', ngControl='familyName', #familyName='ngForm')
+		modal-footer
+			button.btn.btn-primary(type='submit', [disabled]='!registerForm.form.valid') Registrieren

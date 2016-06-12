@@ -35,6 +35,7 @@ module.exports = function(app) {
      * @apiSuccess {Number} data.id Pilot ID
      */
     app.post('/pilot', function(req, res) {
+		console.log(req.body);
         hashAsync(req.body.password, BCRYPT_ROUNDS).then(function(encryptedPass) {
             return Pilot.create({
                 alias: req.body.alias,

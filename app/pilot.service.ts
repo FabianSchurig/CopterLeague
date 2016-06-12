@@ -1,5 +1,5 @@
 import { Injectable }     from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Response, RequestOptions, Headers } from '@angular/http';
 
 import { Pilot }          from './pilot';
 import { Observable }     from 'rxjs/Observable';
@@ -11,6 +11,21 @@ export class PilotService {
 
 	private pilotsUrl = 'api/pilot';  // URL to web API
 
+	private post(pilot: Pilot): Observable<Pilot>{
+		let body = JSON.stringify(pilot);
+		let headers = new Headers();
+		headers.append('Content-Type', 'application/json');
+
+		return this.http.post(this.pilotsUrl, body, {headers})
+						.map(this.extractData)
+						.catch(this.handleError);
+	}
+	
+	register(pilot:Pilot){
+		console.log('try register');
+		return this.post(pilot);
+	}
+	
 	getPilots (): Observable<Pilot[]> {
 		console.log('getPilots');
 		return this.http.get(this.pilotsUrl)

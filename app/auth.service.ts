@@ -17,8 +17,6 @@ export class AuthService {
 	login(email: String, password: String) {
 		let headers = new Headers();
 		headers.append('Content-Type', 'application/json');
-		console.log(email);
-		console.log(password);
 		return this.http.post('/api/auth/login', JSON.stringify({
 				email: email, password: password
 			}), { headers })

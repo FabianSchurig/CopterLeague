@@ -31,6 +31,7 @@ export class LoginComponent {
 		this.auth.login(email, password).subscribe((result) => {
 			if (result) {
 				this.router.navigate(['Events']);
+				//console.log(result);
 			}
 		} , () => { this.error = true; } );
 	}
