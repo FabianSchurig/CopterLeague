@@ -8,17 +8,13 @@ const expressValidator = require('express-validator');
 const config = require('./config');
 const instance = require('./models').instance;
 const routes = require('./routes');
-const jwt = require('jsonwebtoken');
-const bluebird = require('bluebird');
-const verifyAsync = bluebird.promisify(jwt.verify);
+const token = require('./routes/api/token');
 const BearerStrategy = require('passport-http-bearer').Strategy;
 const Pilot = instance.model('Pilot');
 
 passport.use(new BearerStrategy(function(token, done) {
-    verifyAsync(token, config.sessionSecret, {
-        algorithms: ['HS256']
-    }).then(function(decoded) {
-        return Pilot.findById(decoded.id);
+    token.check(token).then(function(id) {
+        return Pilot.findById(id);
     }).then(function(user) {
         done(null, user);
     }).catch(function(err) {
