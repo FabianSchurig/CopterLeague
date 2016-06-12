@@ -36,7 +36,7 @@ passport.use(new LocalStrategy({
 
 module.exports = function(app) {
     /**
-     * @api {get} /auth/login Login via email and password
+     * @api {post} /auth/login Login via email and password
      * @apiName LoginPassword
      * @apiGroup Auth
      *
@@ -47,7 +47,7 @@ module.exports = function(app) {
      * @apiError {Object} message Error Message
      *
      * @apiSuccess {String}   status     "success"
-     * @apiSuccess {Object[]} data       Authorization data
+     * @apiSuccess {Object} data       Authorization data
      * @apiSuccess {Number}   data.id    Pilot ID
      * @apiSuccess {String}   data.token Authorization Token
      */
