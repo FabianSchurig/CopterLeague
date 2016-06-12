@@ -23,4 +23,7 @@ module.exports = function(app) {
 	app.get('/login.component.pug', function(req, res) {
 	res.render('login.component.pug');
 	});
+	app.get('/register.component.pug', function(req, res) {
+	res.render('register.component.pug');
+	});
 };

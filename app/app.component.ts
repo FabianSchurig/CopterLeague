@@ -11,15 +11,17 @@ import { EventService } from './event.service';
 import { AuthService } from './auth.service';
 import { isLoggedin }	from './is-loggedin';
 import { LoginComponent } from './login.component';
+import { RegisterComponent } from './register.component';
 
 @Component({
   selector: 'my-app',
   templateUrl: 'app.component.pug',
-  directives: [ROUTER_DIRECTIVES, PilotsComponent, EventsComponent, LoginComponent],
+  directives: [ROUTER_DIRECTIVES, PilotsComponent, EventsComponent, LoginComponent, RegisterComponent],
   providers: [PilotService, EventsComponent]
 })
 @RouteConfig([
   // {path: '/', redirectTo: ['Dashboard'] },
+  {path: '/register', name: 'Register', component: RegisterComponent},
   {path: '/login', name: 'Login', component: LoginComponent},
   {path: '/pilots', name: 'Pilots', component: PilotsComponent},
   {path: '/events', name: 'Events', component: EventsComponent, useAsDefault: true},
