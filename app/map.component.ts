@@ -14,19 +14,21 @@ import 'rxjs/Rx';
 export class MapComponent implements OnInit {
 	events: Event[];
 	myLatlng = {lat: 51.163 , lng: 10.447};
-	map;
+	map: string = "";
 	locations:string[][];
 	i: number = 0;
 
 	
 	constructor(private eventService: EventService, private router: Router) { 
 		this.locations = [];
+		this.map = "";
 	}
 
 	getEvents() {
 		this.i = 0;
 		this.eventService.getEvents().subscribe(events => {
-			this.events = events;
+			this.events = events;	
+		
 			for(var item of this.events.data){
 				if(item.location != null) {
 					var string = item.location.split(",",2);
@@ -65,7 +67,7 @@ export class MapComponent implements OnInit {
 			for (i in this.locations) {	
 				marker = new google.maps.Marker({
 					position: this.locations[i][0],
-					map: map
+					map: this.map
 					title: this.locations[i][2],
 					icon: pinImage
 				});
@@ -75,7 +77,7 @@ export class MapComponent implements OnInit {
 				google.maps.event.addListener(marker, 'click', (function(marker, i, content) {
 					return function() {
 						infowindow.setContent(content);
-						infowindow.open(map, marker);
+						infowindow.open(this.map, marker);
 					}
 				})(marker, i, content));
 			}
@@ -84,14 +86,13 @@ export class MapComponent implements OnInit {
 
 	ngOnInit() {
 		this.getEvents();
-		
-		
-		var myLatLng = {lat: 51.163 , lng: 10.447}; 
-		map = new google.maps.Map(document.getElementById('map'), {
-			center: {lat: 51.163 , lng: 10.447},
-			zoom: 7
-		});		
-		
+		var myOptions = {
+				zoom: 7,
+				center: {lat: 51.163 , lng: 10.447},
+				mapTypeId: google.maps.MapTypeId.ROADMAP
+			};
+			
+		this.map = new google.maps.Map(document.getElementById('map'), myOptions);
 	}
 
 	onSelect(event: Event) { 
