@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild  } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, Input  } from '@angular/core';
 import { Router, RouteParams, RouteSegment } from '@angular/router-deprecated';
 import { HTTP_PROVIDERS }    from '@angular/http';
 import { FORM_DIRECTIVES, FormBuilder, Validators, ControlGroup, NgIf, NgForm } from '@angular/common';
@@ -21,10 +21,19 @@ export class RegisterComponent implements OnInit {
 	@ViewChild('modal')
 	modal: ModalComponent;
 	errorMessage: string;
-	loggedIn: boolean;
+	@Input() loggedIn;
+	@Output() onLogin = new EventEmitter<boolean>();
 	
 	constructor(private router: Router, private pilotService: PilotService) { 
-		this.loggedIn = !!localStorage.getItem('token');
+	}
+	
+	changeLoggedIn(){
+		if(this.loggedIn){
+			this.loggedIn = false;
+		}else{
+			this.loggedIn = true;
+		}
+		this.onLogin.emit(this.loggedIn);
 	}
 	
 	open(){

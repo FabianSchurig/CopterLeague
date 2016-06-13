@@ -29,5 +29,9 @@ import { RegisterComponent } from './register.component';
   {path: '/pilot/detail/:id', name: 'PilotDetail', component: PilotDetailComponent}
 ])
 export class AppComponent {
-	isLoggedin: boolean = false;
+	public loggedIn: boolean = false;
+	
+	onLogin(logg:boolean){
+		this.loggedIn = logg;
+	}
 }

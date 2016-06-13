@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router-deprecated';
 import { HTTP_PROVIDERS }    from '@angular/http';
 import { FORM_DIRECTIVES, FormBuilder, Validators, ControlGroup, NgIf } from '@angular/common';
@@ -17,7 +17,8 @@ import 'rxjs/Rx';
 export class LoginComponent {
 	form: ControlGroup;
 	error: boolean = false;
-	loggedIn: boolean = isLoggedin();
+	@Input() loggedIn;
+	@Output() onLogin = new EventEmitter<boolean>();
 	id: number = pilotId();
 	
 	constructor(
@@ -38,6 +39,7 @@ export class LoginComponent {
 				console.log(isLoggedin());
 				console.log(pilotId());
 				this.loggedIn = isLoggedin();
+				this.onLogin.emit(this.loggedIn);
 			}
 		} , () => { this.error = true; } );
 	}
@@ -49,6 +51,7 @@ export class LoginComponent {
 				console.log(isLoggedin());
 				this.loggedIn = isLoggedin();
 				this.id = pilotId();
+				this.onLogin.emit(this.loggedIn);
 			}
 		} , () => { this.error = true; } );
 	}

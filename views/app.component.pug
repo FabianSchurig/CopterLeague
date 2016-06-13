@@ -19,7 +19,9 @@ header
 					li
 						a(href='/') Karte
 					li
-						register
-				login
+						a() Eingeloggt: {{loggedIn}} 
+					li
+						register( [loggedIn]='loggedIn', (onLogin)='onLogin($event)', #register='' )
+				login( [loggedIn]='loggedIn', (onLogin)='onLogin($event)' #login='' )
 div.container
 	router-outlet
