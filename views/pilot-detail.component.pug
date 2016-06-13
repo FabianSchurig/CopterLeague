@@ -1,55 +1,56 @@
-div( *ngIf='pilot')
-	h2 {{pilot.title}}
-	div
-		label #ID
-		span {{pilot.id}}
-	div
-		label Alias
-		span {{pilot.alias}}
-	div
-		label Name
-		span {{pilot.familyName}}
-	div
-		label Vorname
-		span {{pilot.firstName}}
-	div
-		label Mitglied seit:
-		span {{pilot.createdAt}}
-	div
-		label Telefon
-		span {{pilot.telephone}}
-	div
-		label E-Mail
-		span {{pilot.email}}
-	div
-		label Beschreibung
-		span {{pilot.notes}}
-	div
-		label #Multis
-		span {{pilot.Multis.length}}
-	table.table
-		tr
-			td ID
-			td Größe
-			td Zellen
-			td notes
-		tr( *ngFor='#multi of pilot.Multis')
-			td {{multi.id}}
-			td {{multi.size}}
-			td {{multi.battery}}
-			td {{multi.notes}}
-	div
-		label #Events
-		span {{pilot.Events.length}}
-	table.table
-		tr
-			td ID
-			td Event
-			td Datum
-		tr( *ngFor='#event of pilot.Events')
-			td {{event.id}}
-			td {{event.title}}
-			td {{event.date | iso8601ToDate }}
-	
-	div
-		button.btn.btn-primary( (click)='goBack()' ) Zurück
+div.container
+	div( *ngIf='pilot')
+		h2 {{pilot.title}}
+		div
+			label #ID
+			span {{pilot.id}}
+		div
+			label Alias
+			span {{pilot.alias}}
+		div
+			label Name
+			span {{pilot.familyName}}
+		div
+			label Vorname
+			span {{pilot.firstName}}
+		div
+			label Mitglied seit:
+			span {{pilot.createdAt}}
+		div
+			label Telefon
+			span {{pilot.telephone}}
+		div
+			label E-Mail
+			span {{pilot.email}}
+		div
+			label Beschreibung
+			span {{pilot.notes}}
+		div
+			label #Multis
+			span {{pilot.Multis.length}}
+		table.table
+			tr
+				td ID
+				td Größe
+				td Zellen
+				td notes
+			tr( *ngFor='#multi of pilot.Multis')
+				td {{multi.id}}
+				td {{multi.size}}
+				td {{multi.battery}}
+				td {{multi.notes}}
+		div
+			label #Events
+			span {{pilot.Events.length}}
+		table.table
+			tr
+				td ID
+				td Event
+				td Datum
+			tr( *ngFor='#event of pilot.Events')
+				td {{event.id}}
+				td {{event.title}}
+				td {{event.date | iso8601ToDate }}
+		
+		div
+			button.btn.btn-primary( (click)='goBack()' ) Zurück

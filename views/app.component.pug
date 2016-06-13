@@ -17,11 +17,11 @@ header
 					li
 						a(href='/') Rangliste
 					li
-						a(href='/') Karte
+						a([routerLink]='["Map"]') Karte
 					li
 						a() Eingeloggt: {{loggedIn}} 
 					li
 						register( [loggedIn]='loggedIn', (onLogin)='onLogin($event)', #register='' )
 				login( [loggedIn]='loggedIn', (onLogin)='onLogin($event)' #login='' )
-div.container
+div.height-1
 	router-outlet
