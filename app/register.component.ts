@@ -8,7 +8,7 @@ import { PilotService } from './pilot.service';
 import { Pilot } from './pilot';
 import 'rxjs/Rx';
 import { MODAL_DIRECTIVES, ModalComponent } from 'ng2-bs3-modal/ng2-bs3-modal';
-import { isLoggedin } from './is-loggedin'
+import { isLoggedin, pilotId } from './is-loggedin'
 
 @Component({
 	selector: 'register',
@@ -21,6 +21,7 @@ export class RegisterComponent implements OnInit {
 	@ViewChild('modal')
 	modal: ModalComponent;
 	errorMessage: string;
+	id: number;
 	@Input() loggedIn;
 	@Output() onLogin = new EventEmitter<boolean>();
 	
@@ -63,6 +64,9 @@ export class RegisterComponent implements OnInit {
 			if (result) {
 				this.router.navigate(['PilotDetail', { id: result.data.id }]);
 				this.close();
+				this.loggedIn = isLoggedin();
+				this.id = pilotId();
+				this.onLogin.emit(this.loggedIn);
 			}
 		} , () => { this.error = true; } );
 	}

@@ -7,7 +7,12 @@ import 'rxjs/Rx';
 
 @Injectable()
 export class PilotService {
-	constructor (private http: Http) {}
+	token: String;
+	id: number;
+	
+	constructor (private http: Http) {
+		this.token = localStorage.getItem('token');
+	}
 
 	private pilotsUrl = 'api/pilot';  // URL to web API
 
@@ -42,6 +47,12 @@ export class PilotService {
 			throw new Error('Response status: ' + res.status);
 		}
 		let body = res.json();
+		if(body.data && body.data.token && body.data.id){
+			this.token = body.data.token;
+			this.id = body.data.id;
+			localStorage.setItem('token', this.token);
+			localStorage.setItem('id', this.id);
+		}
 		console.log(body);
 		return body || [];
 	}
