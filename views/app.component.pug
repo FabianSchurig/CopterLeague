@@ -17,9 +17,7 @@ header
 					li
 						a(href='/') Rangliste
 					li
-						a([routerLink]='["Map"]') Karte
-					li
-						a() Eingeloggt: {{loggedIn}} 
+						a([routerLink]='["Map"]') Karte 
 					li
 						register( [loggedIn]='loggedIn', (onLogin)='onLogin($event)', #register='' )
 				login( [loggedIn]='loggedIn', (onLogin)='onLogin($event)' #login='' )

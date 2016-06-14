@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router-deprecated';
+import { Router, RouteParams, ROUTER_DIRECTIVES } from '@angular/router-deprecated';
 import { HTTP_PROVIDERS }    from '@angular/http';
 import { FORM_DIRECTIVES, FormBuilder, Validators, ControlGroup, NgIf } from '@angular/common';
 
@@ -11,7 +11,7 @@ import 'rxjs/Rx';
 @Component({
 	selector: 'login',
 	templateUrl: 'login.component.pug',
-	directives: [FORM_DIRECTIVES, NgIf],
+	directives: [FORM_DIRECTIVES, NgIf, ROUTER_DIRECTIVES],
 	providers: [HTTP_PROVIDERS]
 })
 export class LoginComponent {

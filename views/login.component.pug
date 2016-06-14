@@ -1,7 +1,7 @@
 div( *ngIf='loggedIn' )
 	ul.nav.navbar-nav.navbar-right
 		li
-			a( href='/#/pilot/detail/{{id}}' ) Mein Profil
+			a( [routerLink]='["PilotDetail", {id: id}]' ) Mein Profil
 		li
 			a( (click)='onLogout()' ) Logout
 
