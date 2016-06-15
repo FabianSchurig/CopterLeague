@@ -24,6 +24,14 @@ export class AuthService {
 			.map(this.extractData)
 			.catch(this.handleError);
 	}
+	
+	facebookLogin(response) {
+		let headers = new Headers();
+		headers.append('Content-Type', 'application/json');
+		return this.http.post('/api/auth/facebook', JSON.stringify(response), { headers })
+			.map(this.extractData)
+			.catch(this.handleError);
+	}
 
 	logout() {
 		/*

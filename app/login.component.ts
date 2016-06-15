@@ -1,6 +1,6 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { Router, RouteParams, ROUTER_DIRECTIVES } from '@angular/router-deprecated';
-import { HTTP_PROVIDERS }    from '@angular/http';
+import { HTTP_PROVIDERS }		from '@angular/http';
 import { FORM_DIRECTIVES, FormBuilder, Validators, ControlGroup, NgIf } from '@angular/common';
 
 import { AuthService } from './auth.service';
@@ -14,7 +14,7 @@ import 'rxjs/Rx';
 	directives: [FORM_DIRECTIVES, NgIf, ROUTER_DIRECTIVES],
 	providers: [HTTP_PROVIDERS]
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
 	form: ControlGroup;
 	error: boolean = false;
 	@Input() loggedIn;
@@ -55,4 +55,49 @@ export class LoginComponent {
 			}
 		} , () => { this.error = true; } );
 	}
+	
+	fbLogin(response){
+		this.auth.facebookLogin(response).subscribe((result) => {
+			if (result) {
+				console.log(isLoggedin());
+				this.loggedIn = isLoggedin();
+				this.id = pilotId();
+				this.onLogin.emit(this.loggedIn);
+			}
+		} , () => { this.error = true; } );
+	}
+	
+	ngOnInit(){
+		console.log('login init')
+		FB.init({
+			appId		: '1708147599444937',
+			cookie		: true,	// enable cookies to allow the server to access 
+								// the session
+			xfbml		: true,	// parse social plugins on this page
+			version		: 'v2.2' // use version 2.2
+		});
+		console.log('init');
+
+	}
+
+	checkLoginState() {
+		var _this = this;
+		FB.getLoginStatus(function(response) {
+			if(response.status === 'connected'){
+				_this.fbLogin(response.authResponse);
+			}else {
+				console.log('FBLogin');
+				FB.login(function(response) {
+					if (response.status === 'connected') {
+						_this.fbLogin(response.authResponse);
+					} else if (response.status === 'not_authorized') {
+					
+					} else {
+					
+					}
+				}, {scope: 'public_profile,email'});
+			}
+		});
+	}
+	
 }

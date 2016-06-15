@@ -1,9 +1,12 @@
+const config = require('../config');
+
 module.exports = function(app) {
-    app.get('/', function(req, res) { res.render('layout'); });
-    app.get('/pilots', function(req, res) { res.render('layout'); });
-    app.get('/events', function(req, res) { res.render('layout'); });
-    app.get('/event/detail/:id', function(req, res) { res.render('layout'); });
-    app.get('/pilot/detail/:id', function(req, res) { res.render('layout'); });
+	function layout(req, res) { res.render('layout', { 'googleMapsKey' : config.googleMaps.APIKey}); };
+    app.get('/', layout );
+    app.get('/pilots', layout );
+    app.get('/events', layout );
+    app.get('/event/detail/:id', layout );
+    app.get('/pilot/detail/:id', layout );
 
 	app.get('/app.component.pug', function(req, res) {
 	res.render('app.component.pug');

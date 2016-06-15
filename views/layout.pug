@@ -6,10 +6,11 @@ html(lang='de')
 		link(rel='stylesheet', href='https://bootswatch.com/cosmo/bootstrap.min.css', crossorigin='anonymous')
 		link(rel='stylesheet', href='https://rawgit.com/lipis/bootstrap-social/gh-pages/bootstrap-social.css')
 		link(rel='stylesheet', href='style.css')
-		script(type="application/javascript", src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyDv8f6roSx7xY5FS-Xb4tjTkGgG5PD9g00")
+		script(type="application/javascript", src='https://maps.googleapis.com/maps/api/js?v=3&key=' + googleMapsKey)
 		script(type="application/javascript", src='https://code.jquery.com/jquery-2.2.3.min.js')
 		script(type="application/javascript", src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js', integrity='sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS', crossorigin='anonymous')
 		script(type="application/javascript", src='https://use.fontawesome.com/c54f8bd9b1.js')
+		script(type="application/javascript", src='https://connect.facebook.net/en_US/sdk.js')
 		// import angular - default scripts
 		script(src='zone.js/dist/zone.js')
 		script(src='reflect-metadata/Reflect.js')
@@ -44,3 +45,12 @@ html(lang='de')
 		|	document.getElementById('fail-popups').style.display= visibility;
 		|};
 		|fpDisplay("none");
+	script(type="application/javascript")
+		|// Load the SDK asynchronously
+		|(function(d, s, id) {
+		|	var js, fjs = d.getElementsByTagName(s)[0];
+		|	if (d.getElementById(id)) return;
+		|	js = d.createElement(s); js.id = id;
+		|	js.src = "//connect.facebook.net/en_US/sdk.js";
+		|	fjs.parentNode.insertBefore(js, fjs);
+		|}(document, 'script', 'facebook-jssdk'));

@@ -7,7 +7,7 @@ div( *ngIf='loggedIn' )
 
 div( *ngIf='!loggedIn' )
 	div.nav-login#nav-login
-		a.btn.btn-social.btn-facebook.navbar-right.nav-space-r.nav-space-t(href="/auth/facebook")
+		a.btn.btn-social.btn-facebook.navbar-right.nav-space-r.nav-space-t(scope='public_profile,email', (click)='checkLoginState()')
 			i.fa.fa-facebook
 			span Login mit Facebook
 		a.btn.btn-social.btn-google.navbar-right.nav-space-r.nav-space-t(href="/auth/google")
