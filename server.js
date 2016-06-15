@@ -8,12 +8,12 @@ const expressValidator = require('express-validator');
 const config = require('./config');
 const instance = require('./models').instance;
 const routes = require('./routes');
-const token = require('./routes/api/token');
+const tokenLib = require('./routes/api/token');
 const BearerStrategy = require('passport-http-bearer').Strategy;
 const Pilot = instance.model('Pilot');
 
 passport.use(new BearerStrategy(function(token, done) {
-    token.check(token).then(function(id) {
+    tokenLib.check(token).then(function(id) {
         return Pilot.findById(id);
     }).then(function(user) {
         done(null, user);
