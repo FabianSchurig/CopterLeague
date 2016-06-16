@@ -10,11 +10,12 @@ import { Iso8601ToDatePipe } from './iso8601.pipe';
 import { isLoggedin, pilotId } from './is-loggedin';
 import 'rxjs/Rx';
 import * as moment from 'moment';
-
+import { FILE_UPLOAD_DIRECTIVES, FileSelectDirective, FileDropDirective, FileUploader } from 'ng2-file-upload/ng2-file-upload';
 
 @Component({
 	selector: 'my-pilot-detail',
 	templateUrl: 'pilot-detail.component.pug',
+	directives: [FILE_UPLOAD_DIRECTIVES],
 	pipes: [Iso8601ToDatePipe]
 })
 export class PilotDetailComponent implements OnInit {
@@ -26,12 +27,28 @@ export class PilotDetailComponent implements OnInit {
 	isEditable= false;
 	active = false;
 	errorMessage = '';
+	pilotAPI = '';
+	public uploader:FileUploader = new FileUploader({url: '/api/pilot/'+this.routeParams.get('id')+'/avatar'});
+	
+	token: string;
 
 	constructor(
 		private pilotService: PilotService,
 		private routeParams: RouteParams
 	) {
 		this.getPilot();
+		this.token = localStorage.getItem('token');
+		this.uploader.authToken = 'Bearer '+this.token;
+		var options:FileUploaderOptions = {};
+		options.allowedFileType = 'image';
+		//options.queueLimit = 1;
+		this.uploader.setOptions(options);
+	}
+	
+	uploadLast(){
+		var num:number = this.uploader.queue.length - 1;
+		//console.log(num);
+		this.uploader.uploadItem(this.uploader.queue[num]);
 	}
 	
 	getPilot() {
@@ -50,7 +67,7 @@ export class PilotDetailComponent implements OnInit {
 	}
 
 	ngOnInit() {	
-		this.id = pilotId();	
+		this.id = pilotId();
 	}
 	
 	onSubmit() {

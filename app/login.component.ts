@@ -70,7 +70,7 @@ export class LoginComponent implements OnInit {
 	ngOnInit(){
 		console.log('login init')
 		FB.init({
-			appId		: '1708147599444937',
+			appId		: '1708147599444937', // TODO replace with api get appId
 			cookie		: true,	// enable cookies to allow the server to access 
 								// the session
 			xfbml		: true,	// parse social plugins on this page
