@@ -93,18 +93,22 @@ module.exports = function(app) {
      * @apiSuccess {String} status  "success"
      * @apiSuccess {Object} data    Pilot
      * @apiSuccess {Number} data.id Pilot ID
-     * @apiSuccess {String} alias
-     * @apiSuccess {String} firstName
-     * @apiSuccess {String} familyName
-     * @apiSuccess {String} notes
-     * @apiSuccess {String} telephone
-     * @apiSuccess {Object} avatar Avatar Image
-     * @apiSuccess {String} avatar.small Small Image URL (80x80)
-     * @apiSuccess {String} avatar.medium Medium Image URL (400x400)
+     * @apiSuccess {String} data.alias
+     * @apiSuccess {String} data.firstName
+     * @apiSuccess {String} data.familyName
+     * @apiSuccess {String} data.notes
+     * @apiSuccess {String} data.telephone
+     * @apiSuccess {String} data.location
+     * @apiSuccess {Number} data.lat
+     * @apiSuccess {Number} data.lng
+     * @apiSuccess {Object} data.avatar Avatar Image
+     * @apiSuccess {String} data.avatar.small Small Image URL (80x80)
+     * @apiSuccess {String} data.avatar.medium Medium Image URL (400x400)
      */
     app.get('/pilot/:id', function(req, res) {
         Pilot.findById(req.params.id, {
-            attributes: ['id', 'alias', 'firstName', 'familyName', 'notes', 'telephone'],
+            attributes: ['id', 'alias', 'firstName', 'familyName', 'notes',
+                'telephone', 'location', 'lat', 'lng'],
             include: [
                 {
                     model: Image,
@@ -149,6 +153,9 @@ module.exports = function(app) {
      * @apiParam {String}          familyName
      * @apiParam {String}          telephone
      * @apiParam {String}          notes
+     * @apiParam {String}          location
+     * @apiParam {Number}          lat
+     * @apiParam {Number}          lng
      *
      * @apiError {String} status  "fail" / "error"
      * @apiError {Object} message Error Message
@@ -168,8 +175,13 @@ module.exports = function(app) {
         req.checkBody('alias', 'alias has maximum length of 40').optional().isLength({min: 1, max: 40});
         req.checkBody('firstName').optional().isLength({min: 1});
         req.checkBody('familyName').optional().isLength({min: 1});
+        req.checkBody('location').optional().isLength({min: 1});
+        req.checkBody('lat').optional().isFloat({min: -90, max: 90});
+        req.checkBody('lng').optional().isFloat({min: -180, max: 180});
 
         req.sanitizeBody('telephone').whitelist('0123456789/+ ');
+        req.sanitizeBody('lat').toFloat();
+        req.sanitizeBody('lng').toFloat();
 
         const errors = req.validationErrors();
         if(errors) {
@@ -181,7 +193,8 @@ module.exports = function(app) {
         }
 
         Pilot.update(req.body, {
-            fields: ['alias', 'familyName', 'firstName', 'notes', 'telephone'],
+            fields: ['alias', 'familyName', 'firstName', 'notes', 'telephone',
+                'location', 'lat', 'lng'],
             where: {
                 id: req.params.id
             }
