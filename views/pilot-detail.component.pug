@@ -1,56 +1,144 @@
-div.container
-	div( *ngIf='pilot')
-		h2 {{pilot.title}}
-		div
-			label #ID
-			span {{pilot.id}}
-		div
-			label Alias
-			span {{pilot.alias}}
-		div
-			label Name
-			span {{pilot.familyName}}
-		div
-			label Vorname
-			span {{pilot.firstName}}
-		div
-			label Mitglied seit:
-			span {{pilot.createdAt}}
-		div
-			label Telefon
-			span {{pilot.telephone}}
-		div
-			label E-Mail
-			span {{pilot.email}}
-		div
-			label Beschreibung
-			span {{pilot.notes}}
-		div
-			label #Multis
-			span {{pilot.Multis.length}}
-		table.table
-			tr
-				td ID
-				td Größe
-				td Zellen
-				td notes
-			tr( *ngFor='#multi of pilot.Multis')
-				td {{multi.id}}
-				td {{multi.size}}
-				td {{multi.battery}}
-				td {{multi.notes}}
-		div
-			label #Events
-			span {{pilot.Events.length}}
-		table.table
+div.container( *ngIf='pilot')
+	div(*ngIf='isEditable')
+		div.row
+			div.col-lg-6
+				div.input-group
+					label.input-group-btn
+						span.btn.btn-default.btn-file Profilbild auswählen
+							input(type='file', ng2FileSelect, [uploader]='uploader', style='display: none;')
+					div( *ngFor='let item of uploader.queue')
+						input.form-control( *ngIf='uploader.getIndexOfItem(item) == uploader.queue.length-1', type='text', readonly, [value]='item?.file?.name')
+			div.col-lg-6
+				button.btn.btn-success.pull-right(type='button', (click)='uploadLast()', [disabled]='!uploader.getNotUploadedItems().length') Upload
+		form( (ngSubmit)='onSubmit()', #pilotForm='ngForm' )
+			div.form-group
+				label(for='alias') Nickname
+				input.form-control(type='text' required [(ngModel)]='pilot.alias', ngControl='alias', #alias='ngForm')
+				div.alert.alert-danger([hidden]='alias.valid || alias.pristine') Nickname wird benötigt
+			div.row
+				div.col-lg-6
+					div.form-group
+						label(for='firstName') Vorname
+						input.form-control(type='text', [(ngModel)]='pilot.firstName', ngControl='firstName', #firstName='ngForm')
+						div.alert.alert-danger([hidden]='firstName.valid || firstName.pristine') Vorname wird benötigt
+				div.col-lg-6
+					div.form-group
+						label(for='familyName') Nachname
+						input.form-control(type='text', [(ngModel)]='pilot.familyName', ngControl='familyName', #familyName='ngForm')
+						div.alert.alert-danger([hidden]='familyName.valid || familyName.pristine') Nachname wird benötigt
+			div.form-group
+				label(for='email') E-Mail
+				input.form-control(type='text', [(ngModel)]='pilot.email', ngControl='email', #email='ngForm')
+				div.alert.alert-danger([hidden]='email.valid || email.pristine') E-Mail wird benötigt
+			div.form-group
+				label(for='telephone') Telefon
+				input.form-control(type='text', [(ngModel)]='pilot.telephone', ngControl='telephone', #telephone='ngForm')
+				div.alert.alert-danger([hidden]='telephone.valid || telephone.pristine') Telefon wird benötigt
+			div.form-group
+				label(for='notes') Beschreibung
+				textarea.form-control(type='text', [(ngModel)]='pilot.notes', ngControl='notes', #notes='ngForm', rows='3')
+				div.alert.alert-danger([hidden]='notes.valid || notes.pristine') Beschreibung wird benötigt
+			div.form-group.hidden
+				label(for='id') id
+				input.form-control(type='text', required [(ngModel)]='pilot.id', ngControl='id', #id='ngForm')
+				div.alert.alert-danger([hidden]='id.valid || id.pristine') Id wird benötigt
+			div.form-group
+				label(for='street') Straße und Hausnummer
+				input.form-control(type='text', [(ngModel)]='pilot.street', ngControl='street', #street='ngForm')
+				div.alert.alert-danger([hidden]='street.valid || street.pristine') Straße und Hausnummer werden benötigt
+			div.row
+				div.col-lg-4
+					div.form-group
+						label(for='plz') Postleitzahl
+						input.form-control(type='text', [(ngModel)]='pilot.plz', ngControl='plz', #plz='ngForm')
+						div.alert.alert-danger([hidden]='plz.valid || plz.pristine') Postleitzahl wird benötigt
+				div.col-lg-6
+					div.form-group
+						label(for='city') Stadt
+						input.form-control(type='text', [(ngModel)]='pilot.city', ngControl='city', #city='ngForm')
+						div.alert.alert-danger([hidden]='city.valid || city.pristine') Stadt wird benötigt
+			div.row
+				div.col-lg-2.col-lg-offset-10
+					button.btn.btn-default.pull-right(type='submit', [disabled]='!pilotForm.form.valid') Speichern
+	div(*ngIf='!isEditable')
+		div.row
+			div.col-md-12
+				h2 {{pilot.alias}}
+				hr
+		div.row
+			div.col-md-5
+				img.img-centered(src='placeholder.png')
+			div.col-md-5.col-md-offset-2
+				div.panel.panel-primary
+					div.panel-heading Persönliche Informationen
+					div.panel-body
+						div
+							label Name
+							span.pull-right {{pilot.firstName}} {{pilot.familyName}}
+						div
+							label Mitglied seit:
+							span.pull-right {{pilot.createdAt}}
+						div
+							label Telefon
+							span.pull-right {{pilot.telephone}}
+						div
+							label E-Mail
+							span.pull-right {{pilot.email}}
+						div
+							label Anzahl Multirotors
+							span.pull-right {{pilot.Multis.length}}
+						div
+							h4 Fluggebiet:
+						div
+							label Straße
+							span.pull-right
+						div
+							label PLZ / Stadt
+							span.pull-right
+						div
+							label Beschreibung
+							p {{pilot.notes}}
+		div.row.top-buffer
+		div.row
+			div.col-md-12
+				h3( *ngIf='pilot.Multis.length > 1' ) {{pilot.Multis.length}} Im Hangar:
+				h3( *ngIf='pilot.Multis.length == 1' ) Einer Im Hangar:
+				h3( *ngIf='pilot.Multis.length == 0' ) Noch keine Copter!
+				hr
+		div.row.top-buffer
+		div.row-fluid
+			div.col-md-4( *ngFor='#multi of pilot.Multis' )
+				div.panel.panel-default.panel-profile.m-b-25
+					div.panel-heading.height-300(style='background-image: url(placeholder.png)')
+					div.panel-body
+						div
+							h2.panel-title {{multi.id}}
+						div
+							label Größe:
+							span.pull-right {{multi.size}}
+						div
+							label Akku:
+							span.pull-right {{multi.battery}}
+						div
+							label Beschreibung: 
+							p {{multi.notes}}	
+		div.row
+			div.col-md-12
+				h3 #Teilgenommene Events {{pilot.Events.length}}
+				hr
+		table.table.table-striped
 			tr
 				td ID
 				td Event
 				td Datum
+				td Punkte
 			tr( *ngFor='#event of pilot.Events')
 				td {{event.id}}
 				td {{event.title}}
 				td {{event.date | iso8601ToDate }}
+				td
 		
-		div
-			button.btn.btn-primary( (click)='goBack()' ) Zurück
+	div
+		button.btn.btn-primary( (click)='goBack()' ) Zurück
+		button.btn.btn-default.pull-right( [class.hidden]='!active', (click)='isEditable=true' ) Profil Bearbeiten
+		button.btn.btn-success.pull-right( [class.hidden]='!active' ) Copter Hinzufügen

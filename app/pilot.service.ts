@@ -26,6 +26,23 @@ export class PilotService {
 						.catch(this.handleError);
 	}
 	
+	private put(pilot: Pilot){
+		let body = JSON.stringify(pilot);
+		let url = `${this.pilotsUrl}/` + pilot.id;
+		let headers = new Headers();
+		headers.append('Content-Type', 'application/json');
+		headers.append('Authorization', 'Bearer '+this.token);
+
+		return this.http.put(url, body, { headers })
+						.map(this.extractData)
+						.catch(this.handleError);
+	}
+	
+	updatePilot(pilot:Pilot){
+		console.log('update pilot');
+		return this.put(pilot);
+	}
+	
 	register(pilot:Pilot){
 		console.log('try register');
 		return this.post(pilot);
