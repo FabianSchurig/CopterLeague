@@ -56,7 +56,7 @@ function processImage(image, basename, suffix, width, height) {
 module.exports = function(app) {
     app.post('/pilot/:id/avatar',
         passport.authenticate('bearer', {session: false}),
-        upload.single('image'), function(req, res) {
+        upload.single('file'), function(req, res) {
 
         if(! (req.user && ('' + req.user.id) === ('' + req.params.id))) {
             return res.status(403).json({
