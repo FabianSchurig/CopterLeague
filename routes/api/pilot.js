@@ -12,11 +12,49 @@ const common = require('./common');
 const BCRYPT_ROUNDS = 10;
 
 module.exports = function(app) {
+    /**
+     * @api {get} /pilot Get Pilot List
+     * @apiName GetPilot
+     * @apiGroup Pilot
+     *
+     * @apiError {String} status  "fail" / "error"
+     * @apiError {Object} message Error Message
+     *
+     * @apiSuccess {String} status "success"
+     * @apiSuccess {Object[]} data Pilots
+     * @apiSuccess {Number} data.id Pilot ID
+     * @apiSuccess {String} data.alias Pilot alias
+     * @apiSuccess {String} data.firstName Pilot first name
+     * @apiSuccess {String} data.familyName Pilot family name
+     * @apiSuccess {Object} data.avatar Pilot avatar image
+     * @apiSuccess {String} data.avatar.small Small avatar image URL (80x80)
+     * @apiSuccess {String} data.avatar.medium Medium avatar image URL (400x400)
+     */
     app.get('/pilot', function(req, res) {
-        Pilot.scope('public').findAll().then(function(pilots) {
-            res.json(pilots);
+        Pilot.findAll({
+            attributes: ['id', 'alias', 'firstName', 'familyName']
+        }).then(function(pilots) {
+            return bluebird.all(pilots.map(pilot => pilot.getImages({
+                order: [['createdAt', 'DESC']],
+                limit: 1
+            }))).then(function(images) {
+                res.json({
+                    status: 'success',
+                    data: pilots.map((pilot, index) => {
+                        pilot = pilot.toJSON();
+                        if(images[index].length > 0) {
+                            pilot.avatar = common.imageObject(images[index][0]);
+                        }
+                        return pilot;
+                    })
+                });
+            });
         }).catch(function(err) {
             console.log(err);
+            res.status(500).json({
+                status: 'error',
+                message: err
+            });
         });
     });
 

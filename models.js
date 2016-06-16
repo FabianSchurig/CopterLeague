@@ -87,26 +87,3 @@ Pilot.belongsToMany(Image, {through: ImageAvatar});
 Image.belongsToMany(Pilot, {through: ImageAvatar});
 
 Image.belongsTo(Pilot, {as: 'Uploader', foreignKey: {allowNull: false}});
-
-// Scopes
-Pilot.addScope('public', {
-    attributes: ['id', 'alias', 'firstName', 'familyName', 'notes'],
-    include: [
-        {
-            model: Multi,
-            attributes: ['id', 'size', 'battery', 'notes']
-        },
-        {
-            model: Event,
-            attributes: ['id', 'title', 'location', 'date'],
-            through: {
-                model: Participation,
-                attributes: ['isCreator']
-            }
-        },
-        {
-            model: Image,
-            attributes: ['id']
-        }
-    ]
-});
