@@ -110,6 +110,8 @@
 	width: 100%;
 }
 
+.top-buffer { margin-top: 40px; }
+
 .img-centered {
 	display: block;
     margin-left: auto;

@@ -7,6 +7,5 @@ div.container
 					div.panel-body
 						h2.panel-title {{pilot.alias}}
 						p {{pilot.id}}
-						p {{pilot.familyName}}, {{pilot.firstName}}
-						p {{pilot.notes}}
+						p {{pilot.firstName}} {{pilot.familyName}}
 						button.btn.btn-default( (click)='onSelect(pilot);gotoDetail();' ) mehr..
