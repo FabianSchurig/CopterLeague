@@ -69,7 +69,7 @@ export class PilotDetailComponent implements OnInit {
 		this.pilotService
 			.updatePilot(uPilot)
 			.subscribe(pilot => {
-				this.pilot = pilot;
+				//this.pilot = pilot;
 				this.isEditable = false;
 				}
 				, error => this.errorMessage = <any>error);
