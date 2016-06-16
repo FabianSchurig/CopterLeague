@@ -1,11 +1,13 @@
 const instance = require('../../models').instance;
 const Pilot = instance.model('Pilot');
+const Image = instance.model('Image');
 const auth = require('./auth');
 const bcrypt = require('bcryptjs');
 const bluebird = require('bluebird');
 const hashAsync = bluebird.promisify(bcrypt.hash);
 const token = require('./token');
 const passport = require('passport');
+const common = require('./common');
 
 const BCRYPT_ROUNDS = 10;
 
@@ -78,15 +80,62 @@ module.exports = function(app) {
         });
     });
 
+    /**
+     * @api {get} /pilot/:id Get Pilot Details
+     * @apiName GetPilotId
+     * @apiGroup Pilot
+     *
+     * @apiParam {Number} id Unique Pilot ID
+     *
+     * @apiError {String} status  "fail" / "error"
+     * @apiError {Object} message Error Message
+     *
+     * @apiSuccess {String} status  "success"
+     * @apiSuccess {Object} data    Pilot
+     * @apiSuccess {Number} data.id Pilot ID
+     * @apiSuccess {String} alias
+     * @apiSuccess {String} firstName
+     * @apiSuccess {String} familyName
+     * @apiSuccess {String} notes
+     * @apiSuccess {String} telephone
+     * @apiSuccess {Object} avatar Avatar Image
+     * @apiSuccess {String} avatar.small Small Image URL (80x80)
+     * @apiSuccess {String} avatar.medium Medium Image URL (400x400)
+     */
     app.get('/pilot/:id', function(req, res) {
-        Pilot.scope('public').findById(req.params.id).then(function(pilot) {
-            if(pilot) {
-                res.json(pilot);
-            } else {
-                res.status(404).end();
+        Pilot.findById(req.params.id, {
+            attributes: ['id', 'alias', 'firstName', 'familyName', 'notes', 'telephone'],
+            include: [
+                {
+                    model: Image,
+                    required: false,
+                }
+            ],
+            limit: 1,
+            order: [[Image, 'createdAt', 'DESC']]
+        }).then(function(pilot) {
+            if(! pilot) {
+                return res.status(404).json({
+                    status: 'fail',
+                    message: 'Not Found'
+                });
             }
+
+            pilot = pilot.toJSON();
+            if(pilot.Images.length > 0) {
+                pilot.avatar = common.imageObject(pilot.Images[0]);
+            }
+            pilot.Images = undefined;
+
+            res.json({
+                status: 'success',
+                data: pilot
+            });
         }).catch(function(err) {
-            console.log(err);
+            res.status(500).json({
+                status: 'error',
+                message: err
+            });
         });
     });
 
