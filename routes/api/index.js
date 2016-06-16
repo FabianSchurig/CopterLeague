@@ -8,4 +8,5 @@ module.exports = function(app) {
     require('./login')(router);
     require('./pilot')(router);
     require('./event')(router);
+    require('./image')(router);
 };

@@ -12,5 +12,17 @@ module.exports = {
     facebook: {
         clientID: 'FACEBOOK_APP_ID',
         clientSecret: 'FACEBOOK_APP_SECRET'
+    },
+
+    // Google Maps Key
+    googleMaps: {
+        APIKey: 'MAPS_KEY'
+    },
+
+    // Amazon AWS S3 Image Bucket
+    s3: {
+        region: 'eu-central-1',
+        bucket: 'BUCKET_NAME',
+        base: 'https://BUCKET.s3.REGION.amazonaws.com'
     }
 };

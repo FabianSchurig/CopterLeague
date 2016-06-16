@@ -56,6 +56,16 @@ const Participation = instance.define('Participation', {
     isCreator: {type: Sequelize.BOOLEAN, allowNull: false}
 });
 
+const Image = instance.define('Image', {
+    id: {type: Sequelize.UUID, allowNull: false, primaryKey: true},
+    small: {type: Sequelize.BOOLEAN, allowNull: false, defaultValue: false},
+    medium: {type: Sequelize.BOOLEAN, allowNull: false, defaultValue: false},
+    large: {type: Sequelize.BOOLEAN, allowNull: false, defaultValue: false}
+});
+
+const ImageAvatar = instance.define('ImageAvatar', {}, {
+    timestamps: false
+});
 
 // Associations
 Multi.belongsTo(Pilot, {foreignKey: {allowNull: false}, onDelete: 'CASCADE'});
@@ -69,6 +79,11 @@ Result.belongsTo(Multi, {foreignKey: {allowNull: false}, onDelete: 'CASCADE'});
 
 Race.belongsTo(Event, {foreignKey: {allowNull: false}, onDelete: 'CASCADE'});
 Event.hasMany(Race);
+
+Pilot.belongsToMany(Image, {through: ImageAvatar});
+Image.belongsToMany(Pilot, {through: ImageAvatar});
+
+Image.belongsTo(Pilot, {as: 'Uploader', foreignKey: {allowNull: false}});
 
 // Scopes
 Pilot.addScope('public', {
@@ -85,6 +100,10 @@ Pilot.addScope('public', {
                 model: Participation,
                 attributes: ['isCreator']
             }
+        },
+        {
+            model: Image,
+            attributes: ['id']
         }
     ]
 });
