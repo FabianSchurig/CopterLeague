@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { RouteParams } from '@angular/router-deprecated';
-import { HTTP_PROVIDERS }    from '@angular/http';
-import { NgForm }    from '@angular/common';
+import { HTTP_PROVIDERS }		from '@angular/http';
+import { NgForm }		from '@angular/common';
 
 import { Pilot } from './pilot';
 import { PilotService } from './pilot.service';
@@ -11,6 +11,8 @@ import { isLoggedin, pilotId } from './is-loggedin';
 import 'rxjs/Rx';
 import * as moment from 'moment';
 import { FILE_UPLOAD_DIRECTIVES, FileSelectDirective, FileDropDirective, FileUploader } from 'ng2-file-upload/ng2-file-upload';
+
+declare var google: any;
 
 @Component({
 	selector: 'my-pilot-detail',
@@ -29,6 +31,8 @@ export class PilotDetailComponent implements OnInit {
 	errorMessage = '';
 	pilotAPI = '';
 	public uploader:FileUploader = new FileUploader({url: '/api/pilot/'+this.routeParams.get('id')+'/avatar'});
+	
+	public address: Object;
 	
 	token: string;
 
@@ -57,7 +61,7 @@ export class PilotDetailComponent implements OnInit {
 			if(this.pilot.id == this.id){
 				this.active = true;
 			}
-		}, error =>  this.errorMessage = <any>error);
+		}, error =>	this.errorMessage = <any>error);
 	}
 	
 	edit(){
@@ -66,7 +70,36 @@ export class PilotDetailComponent implements OnInit {
 	}
 
 	ngOnInit() {	
-		this.id = pilotId();
+		this.id = pilotId();	
+	}
+	
+	loadPlaces(){
+		 // Initialize the search box and autocomplete
+		let searchBox: any = document.getElementById('search-box');
+		console.log(searchBox);
+		let options = {
+			types: [
+			// return only geocoding results, rather than business results.
+			'geocode',
+			],
+			componentRestrictions: { country: 'de' }
+		};
+		var autocomplete = new google.maps.places.Autocomplete(searchBox, options);
+
+		// Add listener to the place changed event
+		autocomplete.addListener('place_changed', () => {
+			let place = autocomplete.getPlace();
+			let lat = place.geometry.location.lat();
+			let lng = place.geometry.location.lng();
+			let address = place.formatted_address;
+			this.placeChanged(lat, lng, address);
+		});
+	}
+	
+	placeChanged(lat: string, lng: string, address: string){
+		this.pilot.formatted_address = address;
+		this.pilot.lat = lat;
+		this.pilot.lng = lng;
 	}
 	
 	onSubmit() {
@@ -78,9 +111,9 @@ export class PilotDetailComponent implements OnInit {
 		uPilot.telephone = this.pilot.telephone;
 		uPilot.notes = this.pilot.notes;
 		uPilot.id = this.pilot.id;
-		uPilot.street = this.pilot.street;
-		uPilot.plz = this.pilot.plz;
-		uPilot.city = this.pilot.city;
+		uPilot.formatted_address = this.pilot.formatted_address;
+		uPilot.lat = this.pilot.lat;
+		uPilot.lng = this.pilot.lng;
 		
 		this.pilotService
 			.updatePilot(uPilot)

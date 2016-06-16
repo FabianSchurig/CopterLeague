@@ -1,5 +1,5 @@
 div.container( *ngIf='pilot')
-	div(*ngIf='isEditable')
+	div( [hidden]='!isEditable')
 		div.row
 			div.col-lg-6
 				div.input-group
@@ -44,24 +44,22 @@ div.container( *ngIf='pilot')
 				input.form-control(type='text', required [(ngModel)]='pilot.id', ngControl='id', #id='ngForm')
 				div.alert.alert-danger([hidden]='id.valid || id.pristine') Id wird benötigt
 			div.form-group
-				label(for='street') Straße und Hausnummer
-				input.form-control(type='text', [(ngModel)]='pilot.street', ngControl='street', #street='ngForm')
-				div.alert.alert-danger([hidden]='street.valid || street.pristine') Straße und Hausnummer werden benötigt
-			div.row
+				label(for='formatted_address') Adresse für einen Marker auf der Karte
+				input.form-control#search-box(type='text', [(ngModel)]='pilot.formatted_address', ngControl='formatted_address', #formatted_address='ngForm')
+				div.alert.alert-danger([hidden]='formatted_address.valid || formatted_address.pristine') Straße und Hausnummer werden benötigt
+			div.row.hidden
 				div.col-lg-4
 					div.form-group
-						label(for='plz') Postleitzahl
-						input.form-control(type='text', [(ngModel)]='pilot.plz', ngControl='plz', #plz='ngForm')
-						div.alert.alert-danger([hidden]='plz.valid || plz.pristine') Postleitzahl wird benötigt
+						input.form-control(type='text', [(ngModel)]='pilot.lat', ngControl='lat', #lat='ngForm')
 				div.col-lg-6
 					div.form-group
-						label(for='city') Stadt
-						input.form-control(type='text', [(ngModel)]='pilot.city', ngControl='city', #city='ngForm')
-						div.alert.alert-danger([hidden]='city.valid || city.pristine') Stadt wird benötigt
+						input.form-control(type='text', [(ngModel)]='pilot.lng', ngControl='lng', #lng='ngForm')
 			div.row
-				div.col-lg-2.col-lg-offset-10
+				div.col-lg-4.col-lg-offset-8
 					button.btn.btn-default.pull-right(type='submit', [disabled]='!pilotForm.form.valid') Speichern
-	div(*ngIf='!isEditable')
+					button.btn.btn-warning.pull-right(type='cancel', (click)='isEditable=false') Abbrechen
+			div.row.top-buffer
+	div( [hidden]='isEditable')
 		div.row
 			div.col-md-12
 				h2 {{pilot.alias}}
@@ -91,10 +89,7 @@ div.container( *ngIf='pilot')
 						div
 							h4 Fluggebiet:
 						div
-							label Straße
-							span.pull-right
-						div
-							label PLZ / Stadt
+							label Adresse
 							span.pull-right
 						div
 							label Beschreibung
@@ -138,8 +133,7 @@ div.container( *ngIf='pilot')
 				td {{event.title}}
 				td {{event.date | iso8601ToDate }}
 				td
-		
 	div
 		button.btn.btn-primary( (click)='goBack()' ) Zurück
-		button.btn.btn-default.pull-right( [class.hidden]='!active', (click)='isEditable=true' ) Profil Bearbeiten
-		button.btn.btn-success.pull-right( [class.hidden]='!active' ) Copter Hinzufügen
+		button.btn.btn-default.pull-right( [class.hidden]='!active || isEditable', (click)='isEditable=true; loadPlaces()' ) Profil Bearbeiten
+		button.btn.btn-success.pull-right( [class.hidden]='!active || isEditable' ) Copter Hinzufügen
