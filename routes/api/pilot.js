@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const bluebird = require('bluebird');
 const hashAsync = bluebird.promisify(bcrypt.hash);
 const token = require('./token');
+const passport = require('passport');
 
 const BCRYPT_ROUNDS = 10;
 
@@ -36,7 +37,20 @@ module.exports = function(app) {
      * @apiSuccess {Number} data.id Pilot ID
      */
     app.post('/pilot', function(req, res) {
-		console.log(req.body);
+        req.checkBody('alias', 'alias has maximum length of 40').isLength({min: 1, max: 40});
+        req.checkBody('email', 'email must be valid').isEmail();
+        req.checkBody('password', 'password must be at least 6 characters long').isLength({min: 6});
+        req.checkBody('firstName').optional().isLength({min: 1});
+        req.checkBody('familyName').optional().isLength({min: 1});
+
+        const errors = req.validationErrors();
+        if(errors) {
+            return res.status(400).json({
+                status: 'fail',
+                message: errors
+            });
+        }
+
         hashAsync(req.body.password, BCRYPT_ROUNDS).then(function(encryptedPass) {
             return Pilot.create({
                 alias: req.body.alias,
@@ -76,25 +90,71 @@ module.exports = function(app) {
         });
     });
 
-    app.put('/pilot/:id', auth(function(req) {
-        return req.user.admin || '' + req.user.id === req.params.id;
-    }), function(req, res) {
+    /**
+     * @api {put} /pilot/:id Change Pilot
+     * @apiName PutPilotId
+     * @apiGroup Pilot
+     *
+     * @apiParam {String}          alias Pilot nick name
+     * @apiParam {String}          firstName
+     * @apiParam {String}          familyName
+     * @apiParam {String}          telephone
+     * @apiParam {String}          notes
+     *
+     * @apiError {String} status  "fail" / "error"
+     * @apiError {Object} message Error Message
+     *
+     * @apiSuccess {String} status  "success"
+     * @apiSuccess {Object} data    Pilot
+     * @apiSuccess {Number} data.id Pilot ID
+     */
+    app.put('/pilot/:id', passport.authenticate('bearer', {session: false}), function(req, res) {
+        if(! (req.user && ('' + req.user.id) === ('' + req.params.id))) {
+            return res.status(403).json({
+                status: 'fail',
+                message: 'AUTH'
+            });
+        }
+
+        req.checkBody('alias', 'alias has maximum length of 40').optional().isLength({min: 1, max: 40});
+        req.checkBody('firstName').optional().isLength({min: 1});
+        req.checkBody('familyName').optional().isLength({min: 1});
+
+        req.sanitizeBody('telephone').whitelist('0123456789/+ ');
+
+        const errors = req.validationErrors();
+        if(errors) {
+            res.status(400).json({
+                status: 'fail',
+                message: errors
+            });
+            return;
+        }
+
         Pilot.update(req.body, {
-            fields: ['alias', 'familyName', 'firstName', 'notes'],
+            fields: ['alias', 'familyName', 'firstName', 'notes', 'telephone'],
             where: {
                 id: req.params.id
             }
-        }).then(function() {
-            return Pilot.scope('public').findById(req.params.id);
-        }).then(function(pilot) {
-            if(pilot) {
-                res.json(pilot);
-            } else {
-                res.status(404).end();
+        }).then(function(affectedCount) {
+            if(affectedCount === 0) {
+                return res.status(404).json({
+                    status: 'fail',
+                    message: 'NOT_FOUND'
+                });
             }
+
+            res.json({
+                status: 'success',
+                data: {
+                    id: req.params.id
+                }
+            });
         }).catch(function(err) {
-            console.log(err);
-            res.status(500).end();
+            res.status(500).json({
+                status: 'error',
+                message: err
+            });
         });
     });
 };
