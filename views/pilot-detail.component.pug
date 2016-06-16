@@ -5,11 +5,12 @@ div.container( *ngIf='pilot')
 				div.input-group
 					label.input-group-btn
 						span.btn.btn-default.btn-file Profilbild auswählen
-							input(type='file', ng2FileSelect, [uploader]='uploader', style='display: none;')
+							input(type='file', ng2FileSelect, [uploader]='uploader', style='display: none;', accept='image/*')
 					div( *ngFor='let item of uploader.queue')
 						input.form-control( *ngIf='uploader.getIndexOfItem(item) == uploader.queue.length-1', type='text', readonly, [value]='item?.file?.name')
 			div.col-lg-6
 				button.btn.btn-success.pull-right(type='button', (click)='uploadLast()', [disabled]='!uploader.getNotUploadedItems().length') Upload
+		div.row.top-buffer
 		form( (ngSubmit)='onSubmit()', #pilotForm='ngForm' )
 			div.form-group
 				label(for='alias') Nickname

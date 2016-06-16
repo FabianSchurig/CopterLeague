@@ -38,10 +38,9 @@ export class PilotDetailComponent implements OnInit {
 	) {
 		this.getPilot();
 		this.token = localStorage.getItem('token');
-		this.uploader.authToken = 'Bearer '+this.token;
 		var options:FileUploaderOptions = {};
 		options.allowedFileType = 'image';
-		//options.queueLimit = 1;
+		options.authToken = 'Bearer '+this.token;
 		this.uploader.setOptions(options);
 	}
 	
