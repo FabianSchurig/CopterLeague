@@ -31,6 +31,7 @@ export class PilotService {
 		let url = `${this.pilotsUrl}/` + pilot.id;
 		let headers = new Headers();
 		headers.append('Content-Type', 'application/json');
+		headers.append('Authorization', 'Bearer '+this.token);
 
 		return this.http.put(url, body, { headers })
 						.map(this.extractData)
