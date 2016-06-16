@@ -11,12 +11,20 @@ export class EventService {
 
 	private eventsUrl = 'api/event';  // URL to web API
 
-	getEvents (): Observable<Event[]> {
+	getEvents () {
 		console.log('getEvents');
 		return this.http.get(this.eventsUrl)
 					.map(this.extractData)
 					.catch(this.handleError);
 	}
+	
+	getEventsByOffset (offset:number) {
+		console.log('getEvents');
+		return this.http.get(this.eventsUrl+'?offset='+offset)
+					.map(this.extractData)
+					.catch(this.handleError);
+	}
+	
 	getEvent(id: number) {
 		return this.http.get(this.eventsUrl + '/'+id)
 					.map(this.extractData)

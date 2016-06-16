@@ -1,8 +1,8 @@
 div.container
 	div( *ngIf='events')
 		h2 Veranstaltungen in Deutschland
-		div.row(*ngFor='let event of events.data')
-			div.col-md-12
+		div.row(*ngFor='let event of events')
+			div.col-md-12( (window:scroll)='scrollListener()' )
 				div.panel.panel-default.panel-profile.m-b-0
 					div.panel-heading.height-300(style='background-image: url(placeholder.png)')
 					div.panel-body

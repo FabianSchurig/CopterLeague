@@ -20,11 +20,21 @@ export class EventsComponent implements OnInit {
 	events: Event[];
 	selectedEvent: Event;
 	newEvent = false;
+	offset: number = 0;
 	
-	constructor(private eventService: EventService, private router: Router) { }
+	constructor(private eventService: EventService, private router: Router) {
+	}
 
 	getEvents() {
-		this.eventService.getEvents().subscribe(events => this.events = events);
+		this.eventService.getEvents().subscribe(events => {
+			this.events = events.data;
+		});
+	}
+	
+	getEventsByOffset(offset: number){
+		this.eventService.getEventsByOffset(offset).subscribe(events => {
+				this.events = this.events.concat(events.data);
+		});
 	}
 	
 	addEvent() {
@@ -52,5 +62,19 @@ export class EventsComponent implements OnInit {
 	onSelect(event: Event) { 
 		this.selectedEvent = event;
 		this.newEvent = false;
+	}
+	
+	scrollListener(){
+		var a = document.body.scrollTop;
+		var b = document.body.scrollHeight - document.body.clientHeight;
+		var c = a/b;
+		if(c == 1){
+			if(this.offset < this.events.length - 9){
+				this.offset = this.events.length;
+				this.getEventsByOffset(this.offset);
+			}
+			
+		}
+		//console.log(this.events);
 	}
 }
