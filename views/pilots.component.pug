@@ -1,13 +1,12 @@
 div.container
-	div.row-fluid( [class.hidden]='!pilots')
-		div(*ngFor='let pilot of pilots; let i = index')
-			div.col-md-4
-				div.panel.panel-default.panel-profile.m-b-25
-					div.panel-heading.height-300.p-0( id='{{pilot.id}}' )
-						img.img-pilots( *ngIf='pilot.avatar?.medium', src='{{pilot.avatar?.medium}}')
-						img.img-pilots( *ngIf='!pilot.avatar?.medium', src='placeholder.png')
-					div.panel-body
-						h2.panel-title {{pilot.alias}}
-						p {{pilot.id}}
-						p {{pilot.firstName}} {{pilot.familyName}}
-						button.btn.btn-default( (click)='onSelect(pilot);gotoDetail();' ) mehr..
+	div.row.auto-clear( [class.hidden]='!pilots')
+		div.col-xs-12.col-sm-6.col-md-4.col-lg-4(*ngFor='let pilot of pilots; let i = index')
+			div.panel.panel-default.panel-profile.m-b-25
+				div.panel-heading.height-300.p-0( id='{{pilot.id}}' )
+					img.img-pilots( *ngIf='pilot.avatar?.medium', src='{{pilot.avatar?.medium}}')
+					img.img-pilots( *ngIf='!pilot.avatar?.medium', src='placeholder.png')
+				div.panel-body
+					h2.panel-title {{pilot.alias}}
+					p {{pilot.id}}
+					p {{pilot.firstName}} {{pilot.familyName}}
+					button.btn.btn-default( (click)='onSelect(pilot);gotoDetail();' ) mehr..

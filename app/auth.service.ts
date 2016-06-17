@@ -44,6 +44,8 @@ export class AuthService {
 		*/
 		this.token = undefined;
 		localStorage.removeItem('token');
+		this.id = undefined;
+		localStorage.removeItem('id');
 		
 		return Observable.of(true);
 	}

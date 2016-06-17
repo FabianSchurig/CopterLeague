@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router-deprecated';
+import { Router, RouteParams, ROUTER_DIRECTIVES } from '@angular/router-deprecated';
 import { HTTP_PROVIDERS }		from '@angular/http';
 
 import { EventService } from './event.service';
@@ -9,6 +9,7 @@ import 'rxjs/Rx';
 @Component({
 	selector: 'map',
 	templateUrl: 'map.component.html',
+	directives: [ROUTER_DIRECTIVES],
 	providers: [EventService]
 })
 export class MapComponent implements OnInit {
@@ -43,7 +44,7 @@ export class MapComponent implements OnInit {
 						'</div>'+
 						'<h1 id="firstHeading" class="firstHeading">'+item.title+'</h1>'+
 						'<div id="bodyContent">'+
-						'Adresse, Datum <a href="">'+
+						'Adresse, Datum <a [routerLink]='["EventDetail", {id: item.id}]'>'+
 						'mehr Details</a> '+
 						'</div>'+
 						'</div>';
@@ -82,6 +83,8 @@ export class MapComponent implements OnInit {
 				})(marker, i, content));
 			}
 		});
+		
+		
 	}
 
 	ngOnInit() {
