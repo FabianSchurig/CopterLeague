@@ -6,11 +6,13 @@ import { EventService } from './event.service';
 import { Event } from './event';
 import 'rxjs/Rx';
 
+import { Iso8601ToDatePipe } from './iso8601.pipe';
+
 @Component({
 	selector: 'map',
 	templateUrl: 'map.component.html',
 	directives: [ROUTER_DIRECTIVES],
-	providers: [EventService]
+	providers: [EventService, Iso8601ToDatePipe]
 })
 export class MapComponent implements OnInit {
 	events: Event[];
@@ -38,13 +40,17 @@ export class MapComponent implements OnInit {
 					this.locations[this.i] = [];
 					this.locations[this.i][0] = new google.maps.LatLng(parseFloat(string[0]),parseFloat(string[1]));
 					console.log(this.myLatLng);
+					let date = new Iso8601ToDatePipe().transform(item.date);
+					let deadline = new Iso8601ToDatePipe().transform(item.deadline);
 					
 					this.locations[this.i][1] = '<div id="content">'+
 						'<div id="siteNotice">'+
 						'</div>'+
 						'<h1 id="firstHeading" class="firstHeading">'+item.title+'</h1>'+
 						'<div id="bodyContent">'+
-						'Adresse, Datum <a [routerLink]='["EventDetail", {id: item.id}]'>'+
+						'<table style="width: 300px"><tr><td><p><b>Datum: </b></p></td><td><p class="pull-right">'+ date + '</p></td></tr>' +
+						'<tr><td><p><b>Anmeldefrist: </b></p></td><td><p class="pull-right">'+ deadline + '</p></td></tr></table>' +
+						'<a class="pull-right" href="/event/detail/'+item.id+'">'+
 						'mehr Details</a> '+
 						'</div>'+
 						'</div>';
