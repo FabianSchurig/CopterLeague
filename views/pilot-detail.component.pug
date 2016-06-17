@@ -44,9 +44,9 @@ div.container( *ngIf='pilot')
 				input.form-control(type='text', required [(ngModel)]='pilot.id', ngControl='id', #id='ngForm')
 				div.alert.alert-danger([hidden]='id.valid || id.pristine') Id wird benötigt
 			div.form-group
-				label(for='formatted_address') Adresse für einen Marker auf der Karte
-				input.form-control#search-box(type='text', [(ngModel)]='pilot.formatted_address', ngControl='formatted_address', #formatted_address='ngForm')
-				div.alert.alert-danger([hidden]='formatted_address.valid || formatted_address.pristine') Straße und Hausnummer werden benötigt
+				label(for='location') Adresse für einen Marker auf der Karte
+				input.form-control#search-box(type='text', [(ngModel)]='pilot.location', ngControl='location', #location='ngForm')
+				div.alert.alert-danger([hidden]='location.valid || location.pristine') Straße und Hausnummer werden benötigt
 			div.row.hidden
 				div.col-lg-4
 					div.form-group
@@ -66,7 +66,8 @@ div.container( *ngIf='pilot')
 				hr
 		div.row
 			div.col-md-5
-				img.img-centered(src='placeholder.png')
+				img.img-centered( *ngIf='pilot?.avatar', [src]='pilot?.avatar?.medium')
+				img.img-centered( *ngIf='!pilot?.avatar', src='placeholder.png')
 			div.col-md-5.col-md-offset-2
 				div.panel.panel-primary
 					div.panel-heading Persönliche Informationen
@@ -85,25 +86,25 @@ div.container( *ngIf='pilot')
 							span.pull-right {{pilot.email}}
 						div
 							label Anzahl Multirotors
-							span.pull-right {{pilot.Multis.length}}
+							span.pull-right {{pilot.Multis?.length}}
 						div
 							h4 Fluggebiet:
 						div
 							label Adresse
-							span.pull-right
+							span.pull-right {{pilot.location}}
 						div
 							label Beschreibung
 							p {{pilot.notes}}
 		div.row.top-buffer
 		div.row
 			div.col-md-12
-				h3( *ngIf='pilot.Multis.length > 1' ) {{pilot.Multis.length}} Im Hangar:
-				h3( *ngIf='pilot.Multis.length == 1' ) Einer Im Hangar:
-				h3( *ngIf='pilot.Multis.length == 0' ) Noch keine Copter!
+				h3( *ngIf='pilot.Multis?.length > 1' ) {{pilot.Multis?.length}} Im Hangar:
+				h3( *ngIf='pilot.Multis?.length == 1' ) Einer Im Hangar:
+				h3( *ngIf='pilot.Multis?.length == 0' ) Noch keine Copter!
 				hr
 		div.row.top-buffer
 		div.row-fluid
-			div.col-md-4( *ngFor='#multi of pilot.Multis' )
+			div.col-md-4( *ngFor='let multi of pilot.Multis' )
 				div.panel.panel-default.panel-profile.m-b-25
 					div.panel-heading.height-300(style='background-image: url(placeholder.png)')
 					div.panel-body
@@ -120,7 +121,7 @@ div.container( *ngIf='pilot')
 							p {{multi.notes}}	
 		div.row
 			div.col-md-12
-				h3 #Teilgenommene Events {{pilot.Events.length}}
+				h3 #Teilgenommene Events {{pilot.Events?.length}}
 				hr
 		table.table.table-striped
 			tr

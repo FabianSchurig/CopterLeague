@@ -21,9 +21,11 @@ export class PilotsComponent implements OnInit {
 	selectedPilot: Pilot;
 
 	constructor(private pilotService: PilotService, private router: Router) { }
-
+	
 	getPilots() {
-		this.pilotService.getPilots().subscribe(pilots => this.pilots = pilots);
+		this.pilotService.getPilots().subscribe(pilots => {
+			this.pilots = pilots.data; 
+		});
 	}
 	
 	gotoDetail() {

@@ -57,7 +57,7 @@ export class PilotDetailComponent implements OnInit {
 	getPilot() {
 		let id = +this.routeParams.get('id');
 		this.pilotService.getPilot(id).subscribe(pilot => {
-			this.pilot = pilot;
+			this.pilot = pilot.data;
 			if(this.pilot.id == this.id){
 				this.active = true;
 			}
@@ -97,7 +97,7 @@ export class PilotDetailComponent implements OnInit {
 	}
 	
 	placeChanged(lat: string, lng: string, address: string){
-		this.pilot.formatted_address = address;
+		this.pilot.location = address;
 		this.pilot.lat = lat;
 		this.pilot.lng = lng;
 	}
@@ -111,7 +111,7 @@ export class PilotDetailComponent implements OnInit {
 		uPilot.telephone = this.pilot.telephone;
 		uPilot.notes = this.pilot.notes;
 		uPilot.id = this.pilot.id;
-		uPilot.formatted_address = this.pilot.formatted_address;
+		uPilot.location = this.pilot.location;
 		uPilot.lat = this.pilot.lat;
 		uPilot.lng = this.pilot.lng;
 		
