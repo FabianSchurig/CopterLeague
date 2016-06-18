@@ -10,6 +10,9 @@ div.container( *ngIf='pilot')
 						input.form-control( *ngIf='uploader.getIndexOfItem(item) == uploader.queue.length-1', type='text', readonly, [value]='item?.file?.name')
 			div.col-lg-6
 				button.btn.btn-success.pull-right(type='button', (click)='uploadLast()', [disabled]='!uploader.getNotUploadedItems().length') Upload
+		div.row
+			div.progress( *ngFor='let item of uploader.queue')
+				div.progress-bar(*ngIf='uploader.getIndexOfItem(item) == uploader.queue.length-1', role='progressbar', [ngStyle]='{ "width": item.progress + "%" }')
 		div.row.top-buffer
 		form( (ngSubmit)='onSubmit()', #pilotForm='ngForm' )
 			div.form-group
@@ -57,7 +60,7 @@ div.container( *ngIf='pilot')
 			div.row
 				div.col-lg-4.col-lg-offset-8
 					button.btn.btn-default.pull-right(type='submit', [disabled]='!pilotForm.form.valid') Speichern
-					button.btn.btn-warning.pull-right(type='cancel', (click)='isEditable=false') Abbrechen
+					button.btn.btn-warning.pull-right(type='button', (click)='isEditable=false;getPilot()') Abbrechen
 			div.row.top-buffer
 	div( [hidden]='isEditable')
 		div.row
