@@ -46,6 +46,7 @@
 .btn-bottom {
 	bottom: 0px;
 	position: absolute;
+	margin-bottom: 20px;
 }
 
 .top-buffer { margin-top:20px; }
@@ -126,7 +127,7 @@
 	width: 100%;
 }
 
-.img-pilots {
+.img-pilots, .img-events {
 	display: block;
     width: 100%;
     height: 100%;

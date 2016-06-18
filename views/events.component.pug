@@ -17,11 +17,9 @@ div.container
 							div
 								label Datum 
 								span.pull-right {{event.date | iso8601ToDate }}
-							button.btn.btn-success.btn-bottom Teilnehmen
 							button.btn.btn-primary.btn-bottom.btn-bottom-right( (click)='onSelect(event);gotoDetail();' ) Details ..
-						div.col-md-6
-							div.panel-location( *ngIf='event.location')
-								img( src="{{getLocationLink(event)}}" )
+						div.col-md-6( *ngIf='event.location')
+							img.img-events( src="{{getLocationLink(event)}}" )
 								
 		div.row
 			div.col-md-12
