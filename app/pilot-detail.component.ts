@@ -28,8 +28,10 @@ export class PilotDetailComponent implements OnInit {
 	id: number = pilotId();
 	isEditable= false;
 	active = false;
+	addCopter = false;
 	errorMessage = '';
 	pilotAPI = '';
+	multi = '';
 	public uploader:FileUploader = new FileUploader({url: '/api/pilot/'+this.routeParams.get('id')+'/avatar'});
 	
 	public address: Object;
@@ -46,6 +48,10 @@ export class PilotDetailComponent implements OnInit {
 		options.allowedFileType = 'image';
 		options.authToken = 'Bearer '+this.token;
 		this.uploader.setOptions(options);
+	}
+	
+	getLocationLink(){
+		return "https://maps.googleapis.com/maps/api/staticmap?maptype=hybrid&center="+ this.pilot.lat + ',' + this.pilot.lng +"&markers=color:blue%7C"+ this.pilot.lat +","+ this.pilot.lng +"&zoom=14&size=500x300&key=AIzaSyDv8f6roSx7xY5FS-Xb4tjTkGgG5PD9g00";
 	}
 	
 	uploadLast(){

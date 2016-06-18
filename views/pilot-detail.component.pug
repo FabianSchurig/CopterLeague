@@ -17,7 +17,7 @@ div.container( *ngIf='pilot')
 		form( (ngSubmit)='onSubmit()', #pilotForm='ngForm' )
 			div.form-group
 				label(for='alias') Nickname
-				input.form-control(type='text' required [(ngModel)]='pilot.alias', ngControl='alias', #alias='ngForm')
+				input.form-control(type='text', required [(ngModel)]='pilot.alias', ngControl='alias', #alias='ngForm')
 				div.alert.alert-danger([hidden]='alias.valid || alias.pristine') Nickname wird benötigt
 			div.row
 				div.col-lg-6
@@ -68,10 +68,10 @@ div.container( *ngIf='pilot')
 				h2 {{pilot.alias}}
 				hr
 		div.row
-			div.col-md-5
+			div.col-md-6
 				img.img-centered( *ngIf='pilot?.avatar', [src]='pilot?.avatar?.medium')
 				img.img-centered( *ngIf='!pilot?.avatar', src='placeholder.png')
-			div.col-md-5.col-md-offset-2
+			div.col-md-6
 				div.panel.panel-primary
 					div.panel-heading Persönliche Informationen
 					div.panel-body
@@ -95,6 +95,8 @@ div.container( *ngIf='pilot')
 						div
 							label Adresse
 							span.pull-right {{pilot.location}}
+						div( *ngIf='pilot.lat && pilot.lng')
+							img.img-pilots( src="{{getLocationLink()}}" )
 						div
 							label Beschreibung
 							p {{pilot.notes}}
@@ -121,7 +123,25 @@ div.container( *ngIf='pilot')
 							span.pull-right {{multi.battery}}
 						div
 							label Beschreibung: 
-							p {{multi.notes}}	
+							p {{multi.notes}}
+			div.col-md-4([hidden]='!addCopter')
+				form( (ngSubmit)='onSubmit()', #copterForm='ngForm' )
+					div.form-group
+						label(for='size') maximaler Rotorabstand in mm
+						input.form-control(required [(ngModel)]='multi.size', ngControl='size', #size='ngForm')
+						div.alert.alert-danger([hidden]='size.valid || size.pristine') Rotorabstand wird benötigt
+					div.form-group
+						label(for='battery') Batterietyp
+						select.form-control(required [(ngModel)]='multi.battery', ngControl='battery', #battery='ngForm')
+							option 3S
+							option 4S
+						div.alert.alert-danger([hidden]='battery.valid || battery.pristine') Batterietyp wird benötigt
+					div.form-group
+						label(for='notes') Beschreibung
+						textarea.form-control(type='text', [(ngModel)]='multi.notes', ngControl='notes', #notes='ngForm', rows='3')
+						div.alert.alert-danger([hidden]='notes.valid || notes.pristine') Beschreibung wird benötigt
+					button.btn.btn-success.pull-right(type='submit', [disabled]='!copterForm.form.valid') Hinzufügen
+					button.btn.btn-warning.pull-right(type='button', (click)='addCopter=false') Abbrechen
 		div.row
 			div.col-md-12
 				h3 #Teilgenommene Events {{pilot.Events?.length}}
@@ -139,5 +159,5 @@ div.container( *ngIf='pilot')
 				td
 	div
 		button.btn.btn-primary( (click)='goBack()' ) Zurück
-		button.btn.btn-default.pull-right( [class.hidden]='!active || isEditable', (click)='isEditable=true; loadPlaces()' ) Profil Bearbeiten
-		button.btn.btn-success.pull-right( [class.hidden]='!active || isEditable' ) Copter Hinzufügen
+		button.btn.btn-default.pull-right( [class.hidden]='!active || isEditable || addCopter', (click)='isEditable=true; loadPlaces()' ) Profil Bearbeiten
+		button.btn.btn-success.pull-right( [class.hidden]='!active || isEditable || addCopter', (click)='addCopter=true') Copter Hinzufügen
