@@ -7,7 +7,12 @@ import 'rxjs/Rx';
 
 @Injectable()
 export class EventService {
-	constructor (private http: Http) {}
+	token: String;
+	id: number;
+	
+	constructor (private http: Http) {
+		this.token = localStorage.getItem('token');
+	}
 
 	private eventsUrl = 'api/event';  // URL to web API
 
@@ -38,33 +43,24 @@ export class EventService {
 		return this.post(event);
 	}
 	
-	private post(event: Event){
-		let data = event.data;
-		let body = '';
-		// parse JSON data to x-www-form-urlencoded
-		for (let key in data) {
-			body += encodeURIComponent(key)+'='+encodeURIComponent(data[key])+'&';
-		}
-		let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
-		let options = new RequestOptions({ headers: headers });
+	private post(event: Event): Observable<Event>{
+		let body = JSON.stringify(event);
+		let headers = new Headers();
+		headers.append('Content-Type', 'application/json');
+		headers.append('Authorization', 'Bearer '+this.token);
 
-		return this.http.post(this.eventsUrl, body, options)
+		return this.http.post(this.eventsUrl, body, {headers})
 						.map(this.extractData)
 						.catch(this.handleError);
 	}
 	
 	private put(event: Event){
-		let data = event.data;
-		let body = '';
-		// parse JSON data to x-www-form-urlencoded
-		for (let key in data) {
-			body += encodeURIComponent(key)+'='+encodeURIComponent(data[key])+'&';
-		}
-		let url = `${this.eventsUrl}/${this.event.data.id}`;
-		let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
-		let options = new RequestOptions({ headers: headers });
+		let body = JSON.stringify(event);
+		let headers = new Headers();
+		headers.append('Content-Type', 'application/json');
+		headers.append('Authorization', 'Bearer '+this.token);
 
-		return this.http.put(url, body, options)
+		return this.http.put(this.eventsUrl, body, {headers})
 						.map(this.extractData)
 						.catch(this.handleError);
 	}

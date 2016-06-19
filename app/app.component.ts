@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouteConfig, ROUTER_DIRECTIVES } from '@angular/router-deprecated';
+import { RouteConfig, ROUTER_DIRECTIVES, Router } from '@angular/router-deprecated';
 
 import { PilotsComponent } from './pilots.component';
 import { PilotDetailComponent } from './pilot-detail.component';
@@ -30,10 +30,17 @@ import { MapComponent } from './map.component';
   {path: '/pilot/detail/:id', name: 'PilotDetail', component: PilotDetailComponent},
   {path: '/map', name: 'Map', component: MapComponent}
 ])
-export class AppComponent {
+export class AppComponent implements AfterViewInit {
 	public loggedIn: boolean = isLoggedin();
+	
+	constructor(private router: Router){
+		
+	}
 	
 	onLogin(logg:boolean){
 		this.loggedIn = logg;
+		console.log(this.router);
 	}
+	
+	
 }

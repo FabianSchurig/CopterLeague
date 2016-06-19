@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router-deprecated';
 import { HTTP_PROVIDERS }    from '@angular/http';
 
@@ -6,6 +6,8 @@ import { EventService } from './event.service';
 import { EventDetailComponent } from './event-detail.component';
 import { Event } from './event';
 import 'rxjs/Rx';
+
+import { isLoggedin }	from './is-loggedin';
 
 import { Iso8601ToDatePipe } from './iso8601.pipe';
 
@@ -21,8 +23,10 @@ export class EventsComponent implements OnInit {
 	selectedEvent: Event;
 	newEvent = false;
 	offset: number = 0;
+	loggedIn = false;
 	
 	constructor(private eventService: EventService, private router: Router) {
+		this.loggedIn = isLoggedin();
 	}
 
 	getEvents() {
