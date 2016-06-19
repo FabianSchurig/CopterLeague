@@ -5,6 +5,7 @@ import { NgForm }    from '@angular/common';
 
 import { Event } from './event';
 import { EventService } from './event.service';
+import { DatepickerComponent } from './datepicker.component';
 import 'rxjs/Rx';
 import * as moment from 'moment';
 
@@ -13,6 +14,7 @@ import { Iso8601ToDatePipe } from './iso8601.pipe';
 @Component({
 	selector: 'my-event-detail',
 	templateUrl: 'event-detail.component.pug',
+	directives: [ DatepickerComponent ],
 	pipes: [Iso8601ToDatePipe]
 })
 export class EventDetailComponent implements OnInit {
@@ -30,6 +32,15 @@ export class EventDetailComponent implements OnInit {
 		private router: Router){
 	}
 	
+	onDatePicked(date: string){
+		console.log(date);
+		this.event.data.date = new Date(date).toISOString();
+	}
+	
+	onDeadlinePicked(deadline: string){
+		console.log(deadline);
+		this.event.data.deadline = new Date(deadline).toISOString();
+	}
 	
 	onSubmit() {
 		this.submitted = true;
@@ -58,7 +69,9 @@ export class EventDetailComponent implements OnInit {
 			let id = +this._routeParams.get('id');
 			this.navigated = true;
 			this._eventService.getEvent(id).subscribe(event => this.event = event, error => this.errorMessage = <any>error);
+			this.submitted = true;
 		} else {
+			this.submitted = false;
 			this.newEvent();
 		}
 	}

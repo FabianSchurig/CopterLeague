@@ -1,17 +1,38 @@
 div.container
 	div( *ngIf='event')
-		div([hidden]='!submitted')
+		div([hidden]='submitted')
 			form(*ngIf='active', (ngSubmit)='onSubmit()', #eventForm='ngForm')
 				div.form-group
 					label(for='title') Titel
 					input.form-control(type='text' required [(ngModel)]='event.data.title', ngControl='title', #title='ngForm')
 					div.alert.alert-danger([hidden]='title.valid || title.pristine') Titel wird benötigt
+				div.row
+					div.col-md-6
+						div.form-group
+							label(for='date') Datum {{event.data.date | iso8601ToDate}}
+							datepicker( (onDatePicked)='onDatePicked($event)' )
+							input.form-control.hidden(type='text' required [(ngModel)]='event.data.date', value='getDate()', ngControl='date', #date='ngForm', disabled='')
+							div.alert.alert-danger([hidden]='date.valid || date.pristine') Datum wird benötigt
+					div.col-md-6
+						div.form-group
+							label(for='deadline') Anmeldefrist {{event.data.deadline | iso8601ToDate}}
+							datepicker( (onDatePicked)='onDeadlinePicked($event)' )
+							input.form-control.hidden(type='text' required [(ngModel)]='event.data.deadline', ngControl='deadline', #deadline='ngForm', disabled='')
+							div.alert.alert-danger([hidden]='deadline.valid || deadline.pristine') Anmeldefrist wird benötigt
 				div.form-group
-					label(for='date') Datum
-					input.form-control(type='text' required [(ngModel)]='event.data.date', ngControl='date', #date='ngForm')
-					div.alert.alert-danger([hidden]='date.valid || date.pristine') Datum wird benötigt
+					label(for='maxParticipants') maximale Teilnehmeranzahl
+					input.form-control(type='text' required [(ngModel)]='event.data.maxParticipants', ngControl='maxParticipants', #maxParticipants='ngForm')
+					div.alert.alert-danger([hidden]='maxParticipants.valid || maxParticipants.pristine') Teilnehmeranzahl wird benötigt
+				div.form-group
+					label(for='location') Ort
+					input.form-control(type='text' required [(ngModel)]='event.data.location', ngControl='location', #location='ngForm')
+					div.alert.alert-danger([hidden]='location.valid || location.pristine') Ort wird benötigt
+				div.form-group
+					label(for='notes') Beschreibung
+					input.form-control(type='text' required [(ngModel)]='event.data.notes', ngControl='notes', #notes='ngForm')
+					div.alert.alert-danger([hidden]='notes.valid || notes.pristine') beschreibung wird benötigt
 				button.btn.btn-default(type='submit', [disabled]='!eventForm.form.valid') Speichern
-		div([hidden]='submitted')
+		div([hidden]='!submitted')
 			div.row
 				div.col-md-12
 					h2 {{event.data.title}}

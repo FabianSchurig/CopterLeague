@@ -1,0 +1,17 @@
+<div>
+	<div class="row">
+		<div class="col-md-12">
+			<button type="button" class="btn btn-sm btn-primary" (click)="today()">Heute</button>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12 col-md-8">
+			<div style="display:inline-block; min-height:290px;">
+				<datepicker [(ngModel)]="dt" [minDate]="minDate" [showWeeks]="true" (ngModelChange)="emitDate()"></datepicker>
+			</div>
+		</div>
+		<div class="col-sm-12 col-md-4">
+			<timepicker [(ngModel)]="mytime" (ngModelChange)="emitDate()" [hourStep]="hstep" [minuteStep]="mstep" [showMeridian]="ismeridian" style=""></timepicker>
+		</div>
+	</div>
+</div>

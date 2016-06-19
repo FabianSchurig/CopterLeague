@@ -206,3 +206,7 @@ h1,h2,h3,h4,h5,h6 {
     .auto-clear .col-xs-4:nth-child(3n+1){clear:left;}
     .auto-clear .col-xs-6:nth-child(odd){clear:left;}
 }
+
+timepicker > table > tbody > tr > td > input {
+	width: 70px !important;
+}
