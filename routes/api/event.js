@@ -27,6 +27,8 @@ module.exports = function(app) {
      * @apiSuccess {String}   data.title              Event title
      * @apiSuccess {Boolean}  data.isCancelled        If Event was cancelled
      * @apiSuccess {String}   data.location           Event location
+     * @apiSuccess {Number}   data.lat                Event location latitude
+     * @apiSuccess {Number}   data.lng                Event location longitude
      * @apiSuccess {Object[]} data.participants       Three participants
      * @apiSuccess {Number}   data.participants.id    Pilot ID
      * @apiSuccess {String}   data.participants.alias Pilot alias
@@ -55,7 +57,7 @@ module.exports = function(app) {
 
         Event.findAll({
             attributes: ['id', 'date', 'deadline', 'title', 'isCancelled',
-                'location'],
+                'location', 'lat', 'lng'],
             limit: req.query.limit,
             offset: req.query.offset,
             order: [
@@ -106,6 +108,8 @@ module.exports = function(app) {
      * @apiParam {Date}   deadline="date" Optional. Event deadline, formatted as ISO 8601
      * @apiParam {Number{1-}} maxParticipants Optional. Maximum number of participants
      * @apiParam {String} location Optional. Event location
+     * @apiParam {Number} lat Optional. Event latitude location
+     * @apiParam {Number} lng Optional. Event longitude location
      * @apiParam {String} notes Optional. Event detail text
      *
      * @apiSuccess {String} status "success"
@@ -118,6 +122,11 @@ module.exports = function(app) {
         req.checkBody('date', 'date must be valid ISO 8601 date string').isISO8601();
         req.checkBody('deadline', 'deadline must be valid ISO 8601 date string').optional().isISO8601();
         req.checkBody('maxParticipants', 'maxParticipants must be an integer >0').optional().isInt({min: 1});
+        req.checkBody('lat').optional().isFloat({min: -90, max: 90});
+        req.checkBody('lng').optional().isFloat({min: -180, max: 180});
+
+        req.sanitizeBody('lat').toFloat();
+        req.sanitizeBody('lng').toFloat();
 
         const errors = req.validationErrors();
         if(errors) {
@@ -134,7 +143,9 @@ module.exports = function(app) {
             deadline: req.body.deadline || req.body.date,
             maxParticipants: req.body.maxParticipants,
             location: req.body.location,
-            notes: req.body.notes
+            notes: req.body.notes,
+            lat: req.body.lat,
+            lng: req.body.lng
         }).then(function(event) {
             return Participation.create({
                 PilotId: req.user.id,
@@ -173,6 +184,8 @@ module.exports = function(app) {
      * @apiSuccess {Boolean}  data.isCancelled If Event was cancelled by creator
      * @apiSuccess {Number}   data.maxParticipants Maximum number of participants
      * @apiSuccess {String}   data.location Event location
+     * @apiSuccess {Number}   data.lat Event location latitude
+     * @apiSuccess {Number}   data.lng Event location logitude
      * @apiSuccess {String}   data.policy Event policy
      * @apiSuccess {String}   data.notes Event detail text
      * @apiSuccess {Object[]} data.participants All pilots participating
@@ -185,7 +198,7 @@ module.exports = function(app) {
     app.get('/event/:id', function(req, res) {
         Event.findById(req.params.id, {
             attributes: ['id', 'date', 'deadline', 'title', 'isCancelled',
-                'maxParticipants', 'location', 'policy', 'notes'],
+                'maxParticipants', 'location', 'lat', 'lng', 'policy', 'notes'],
             include: [
                 {
                     model: Pilot,

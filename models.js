@@ -35,6 +35,8 @@ const Event = instance.define('Event', {
     isCancelled: {type: Sequelize.BOOLEAN , allowNull: false, defaultValue: false},
     maxParticipants: {type: Sequelize.INTEGER, validate: {min: 1}},
     location: {type: Sequelize.STRING},
+    lat: Sequelize.DOUBLE,
+    lng: Sequelize.DOUBLE,
     policy: {type: Sequelize.STRING},
     notes: {type: Sequelize.TEXT, allowNull: false, defaultValue: ''},
     isOfficial: {type: Sequelize.BOOLEAN}

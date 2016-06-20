@@ -1,7 +1,6 @@
 const instance = require('../../models').instance;
 const Pilot = instance.model('Pilot');
 const Image = instance.model('Image');
-const auth = require('./auth');
 const bcrypt = require('bcryptjs');
 const bluebird = require('bluebird');
 const hashAsync = bluebird.promisify(bcrypt.hash);
