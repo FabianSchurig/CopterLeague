@@ -99,15 +99,7 @@ module.exports = function(app) {
                 familyName: req.body.familyName
             });
         }).then(function(pilot) {
-            return token.generate(pilot.id, false).then(function(token) {
-                res.json({
-                    status: 'success',
-                    data: {
-                        id: pilot.id,
-                        token
-                    }
-                });
-            });
+            return token.login(pilot.id, res);
         }).catch(function(err) {
             console.log(err);
             res.status(500).json({

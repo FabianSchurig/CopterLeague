@@ -1,5 +1,5 @@
 const bluebird = require('bluebird');
-const auth = require('./auth');
+const passport = require('passport');
 const instance = require('../../models').instance;
 const Pilot = instance.model('Pilot');
 const Event = instance.model('Event');
@@ -116,9 +116,14 @@ module.exports = function(app) {
      * @apiSuccess {Object} data Event data
      * @apiSuccess {Number} data.id Event ID
      */
-    app.post('/event', auth(function() {
-        return true;
-    }), function(req, res) {
+    app.post('/event', passport.authenticate('bearer', {session: false}), function(req, res) {
+        if(! req.user) {
+            return res.status(403).json({
+                status: 'fail',
+                message: 'AUTH'
+            });
+        }
+
         req.checkBody('date', 'date must be valid ISO 8601 date string').isISO8601();
         req.checkBody('deadline', 'deadline must be valid ISO 8601 date string').optional().isISO8601();
         req.checkBody('maxParticipants', 'maxParticipants must be an integer >0').optional().isInt({min: 1});

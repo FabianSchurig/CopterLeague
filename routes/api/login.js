@@ -51,12 +51,8 @@ module.exports = function(app) {
      * @apiSuccess {String}   data.token Authorization Token
      */
     app.post('/auth/login', passport.authenticate('local', {session: false}), function(req, res) {
-        token.generate(req.user.id, false).then(function(token) {
-            res.json({
-                status: 'success',
-                data: {token, id: req.user.id}
-            });
-        }).catch(function(err) {
+        token.login(req.user.id, res)
+        .catch(function(err) {
             return res.status(500).json({
                 status: 'error',
                 message: 'JWT'
