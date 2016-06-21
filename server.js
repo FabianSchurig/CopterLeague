@@ -11,9 +11,10 @@ const routes = require('./routes');
 const tokenLib = require('./routes/api/token');
 const BearerStrategy = require('passport-http-bearer').Strategy;
 const Pilot = instance.model('Pilot');
+const cookieParser = require('cookie-parser');
 
-passport.use(new BearerStrategy(function(token, done) {
-    tokenLib.check(token).then(function(id) {
+passport.use(new BearerStrategy({passReqToCallback: true}, function(req, token, done) {
+    tokenLib.check(token, req.signedCookies.xss).then(function(id) {
         return Pilot.findById(id);
     }).then(function(user) {
         done(null, user);
@@ -33,6 +34,7 @@ app.use(serveStatic(path.join(__dirname, 'node_modules')));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(expressValidator());
+app.use(cookieParser(config.sessionSecret));
 app.use(passport.initialize());
 
 routes(app);
