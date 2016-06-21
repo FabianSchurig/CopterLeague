@@ -28,6 +28,16 @@ export class MapComponent implements OnInit {
 		this.marker = [];
 		this.map = "";
 	}
+	
+	gotoDetail(type: string, id:number) {
+		if(type == 'pilot'){
+			this.router.navigate(['PilotDetail', { id: id }]);
+		}
+		if(type == 'event'){
+			this.router.navigate(['EventDetail', { id: id }]);
+		}
+		
+	}
 
 	getMarkers() {
 		this.i = 0;
@@ -55,6 +65,8 @@ export class MapComponent implements OnInit {
 						'<div id="bodyContent">'+
 						'<a class="pull-right" href="/'+item.type+'/detail/'+item.id+'">'+
 						'mehr Details</a> '+
+						'<button class="pull-right btn btn-primary" (click)="gotoDetail('+item.type+','+item.id+')">'+
+						'mehr Details</button> '+
 						'</div>'+
 						'</div>';
 						
@@ -114,7 +126,7 @@ export class MapComponent implements OnInit {
 				})(marker, i, content));
 			}
 			var options = {
-				imagePath: 'images/m'
+				imagePath: 'js-marker-clusterer/images/m'
 			};
 
 			var markerCluster = new MarkerClusterer(this.map, this.markers, options);
