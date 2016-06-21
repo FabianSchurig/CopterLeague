@@ -7,6 +7,7 @@ import { Pilot } from './pilot';
 import { PilotService } from './pilot.service';
 
 import { Iso8601ToDatePipe } from './iso8601.pipe';
+import { MarkdownPipe } from './markdown.pipe';
 import { isLoggedin, pilotId } from './is-loggedin';
 import 'rxjs/Rx';
 import * as moment from 'moment';
@@ -18,7 +19,7 @@ declare var google: any;
 	selector: 'my-pilot-detail',
 	templateUrl: 'pilot-detail.component.pug',
 	directives: [FILE_UPLOAD_DIRECTIVES],
-	pipes: [Iso8601ToDatePipe]
+	pipes: [Iso8601ToDatePipe, MarkdownPipe]
 })
 export class PilotDetailComponent implements OnInit {
 	pilot: Pilot;

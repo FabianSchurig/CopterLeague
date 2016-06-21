@@ -45,10 +45,12 @@ export class DatepickerComponent {
 		];
 	}	
 	public emitDate(){
-		this.onDatePicked.emit(this.dt && this.mytime.getTime() || new Date().getTime());
+		this.dt.setHours(this.mytime.getHours());
+		this.dt.setMinutes(this.mytime.getMinutes());
+		this.onDatePicked.emit(this.dt && this.dt.getTime() || new Date().getTime());
 	}
 	public getDate():number {
-		return this.dt && this.mytime.getTime() || new Date().getTime();
+		return this.dt && this.dt.getTime() || new Date().getTime();
 	}
 	public today():void {
 		this.dt = new Date();

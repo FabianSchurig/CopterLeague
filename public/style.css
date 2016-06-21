@@ -210,3 +210,9 @@ h1,h2,h3,h4,h5,h6 {
 timepicker > table > tbody > tr > td > input {
 	width: 70px !important;
 }
+
+.alert-custom{
+	background-color: #3399ff;
+    border-color: #3399ff;
+    color: #ffffff;
+}

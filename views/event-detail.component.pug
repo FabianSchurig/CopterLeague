@@ -27,10 +27,23 @@ div.container
 					label(for='location') Ort
 					input.form-control#search-box(type='text', required [(ngModel)]='event.location', ngControl='location', #location='ngForm')
 					div.alert.alert-danger([hidden]='location.valid || location.pristine') Ort wird benötigt
+				div.row.hidden
+					div.col-lg-4
+						div.form-group
+							input.form-control(type='text', [(ngModel)]='event.lat', ngControl='lat', #lat='ngForm')
+					div.col-lg-6
+						div.form-group
+							input.form-control(type='text', [(ngModel)]='event.lng', ngControl='lng', #lng='ngForm')
+				div.alert.alert-dismissible.alert-custom
+					button.close(type='button', data-dismiss='alert' ) &times;
+					p Wusstest du schon: Du kannst Markdown verwenden um deine Beschreibung zu stylen.
 				div.form-group
 					label(for='notes') Beschreibung
 					input.form-control(type='text', required [(ngModel)]='event.notes', ngControl='notes', #notes='ngForm')
 					div.alert.alert-danger([hidden]='notes.valid || notes.pristine') beschreibung wird benötigt
+				div.form-group
+					h5 Vorschau deiner Beschreibung
+					div.well( [innerHTML]='event.notes | markdown' )
 				button.btn.btn-default(type='submit', [disabled]='!eventForm.form.valid') Speichern
 		div([hidden]='!submitted')
 			div.row
@@ -58,17 +71,18 @@ div.container
 							div
 								label Teilnehmer
 								span.pull-right {{event.participants?.length}} / {{event.maxParticipants}}
-				div.col-md-6
-					h4 Ort
-					span {{event.location}}
+				div.col-md-6( *ngIf='event.lat && event.lng')
+					img.img-events( src="{{getLocationLink(event)}}" )
 			div.row
 				div.col-md-12
 					div
 						h3 Regelwerk
+						hr(style='margin-top: 0px;')
 						span {{event.policy}}
 					div
 						h3 Beschreibung
-						span {{event.notes}}
+						hr(style='margin-top: 0px;')
+						div( [innerHTML]='event.notes | markdown')
 			h3 Teilnehmer
 			table.table
 				tr

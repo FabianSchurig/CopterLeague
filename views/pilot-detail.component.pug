@@ -31,10 +31,6 @@ div.container( *ngIf='pilot')
 						input.form-control(type='text', [(ngModel)]='pilot.familyName', ngControl='familyName', #familyName='ngForm')
 						div.alert.alert-danger([hidden]='familyName.valid || familyName.pristine') Nachname wird benötigt
 			div.form-group
-				label(for='email') E-Mail
-				input.form-control(type='text', [(ngModel)]='pilot.email', ngControl='email', #email='ngForm')
-				div.alert.alert-danger([hidden]='email.valid || email.pristine') E-Mail wird benötigt
-			div.form-group
 				label(for='telephone') Telefon
 				input.form-control(type='text', [(ngModel)]='pilot.telephone', ngControl='telephone', #telephone='ngForm')
 				div.alert.alert-danger([hidden]='telephone.valid || telephone.pristine') Telefon wird benötigt
@@ -42,6 +38,8 @@ div.container( *ngIf='pilot')
 				label(for='notes') Beschreibung
 				textarea.form-control(type='text', [(ngModel)]='pilot.notes', ngControl='notes', #notes='ngForm', rows='3')
 				div.alert.alert-danger([hidden]='notes.valid || notes.pristine') Beschreibung wird benötigt
+			div.form-group
+				div.well( [innerHTML]='pilot. notes | markdown' )
 			div.form-group.hidden
 				label(for='id') id
 				input.form-control(type='text', required [(ngModel)]='pilot.id', ngControl='id', #id='ngForm')
@@ -78,16 +76,10 @@ div.container( *ngIf='pilot')
 						div
 							label Name
 							span.pull-right {{pilot.firstName}} {{pilot.familyName}}
-						div
-							label Mitglied seit:
-							span.pull-right {{pilot.createdAt}}
-						div
+						div( *ngIf='pilot.telephone')
 							label Telefon
 							span.pull-right {{pilot.telephone}}
-						div
-							label E-Mail
-							span.pull-right {{pilot.email}}
-						div
+						div( *ngIf='pilot.Multis?.length' )
 							label Anzahl Multirotors
 							span.pull-right {{pilot.Multis?.length}}
 						div
@@ -97,15 +89,17 @@ div.container( *ngIf='pilot')
 							span.pull-right {{pilot.location}}
 						div( *ngIf='pilot.lat && pilot.lng')
 							img.img-pilots( src="{{getLocationLink()}}" )
-						div
-							label Beschreibung
-							p {{pilot.notes}}
+		div.row( *ngIf='pilot.notes != ""')
+			div.col-md-12
+				h2 Beschreibung
+				hr(style='margin-top: 0px;')
+				div( [innerHTML]='pilot.notes | markdown')
 		div.row.top-buffer
 		div.row
 			div.col-md-12
 				h3( *ngIf='pilot.Multis?.length > 1' ) {{pilot.Multis?.length}} Im Hangar:
 				h3( *ngIf='pilot.Multis?.length == 1' ) Einer Im Hangar:
-				h3( *ngIf='pilot.Multis?.length == 0' ) Noch keine Copter!
+				h3( *ngIf='!pilot.Multis?.length' ) Dieser Pilot besitzt noch keinen Multicopter.
 				hr
 		div.row.top-buffer
 		div.row-fluid

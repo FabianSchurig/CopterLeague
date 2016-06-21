@@ -12,12 +12,13 @@ import * as moment from 'moment';
 import { isLoggedin, pilotId }	from './is-loggedin';
 
 import { Iso8601ToDatePipe } from './iso8601.pipe';
+import { MarkdownPipe } from './markdown.pipe';
 
 @Component({
 	selector: 'my-event-detail',
 	templateUrl: 'event-detail.component.pug',
 	directives: [ DatepickerComponent ],
-	pipes: [Iso8601ToDatePipe]
+	pipes: [Iso8601ToDatePipe, MarkdownPipe]
 })
 export class EventDetailComponent implements OnInit, AfterViewInit {
 	@Input() event: Event;
@@ -36,13 +37,19 @@ export class EventDetailComponent implements OnInit, AfterViewInit {
 	}
 	
 	onDatePicked(date: string){
-		console.log(date);
-		this.event.date = new Date(date).toISOString();
+		if(this.active && !this.submitted){
+			this.event.date = new Date(date).toISOString();
+		}
 	}
 	
 	onDeadlinePicked(deadline: string){
-		console.log(deadline);
-		this.event.deadline = new Date(deadline).toISOString();
+		if(this.active && !this.submitted){
+			this.event.deadline = new Date(deadline).toISOString();
+		}
+	}
+	
+	getLocationLink(){
+		return "https://maps.googleapis.com/maps/api/staticmap?maptype=hybrid&center="+ this.event.lat + ',' + this.event.lng +"&markers=color:blue%7C"+ this.event.lat +","+ this.event.lng +"&zoom=16&size=500x300&key=AIzaSyDv8f6roSx7xY5FS-Xb4tjTkGgG5PD9g00";
 	}
 	
 	onSubmit() {
