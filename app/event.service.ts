@@ -11,7 +11,6 @@ export class EventService {
 	id: number;
 	
 	constructor (private http: Http) {
-		this.token = localStorage.getItem('token');
 	}
 
 	private eventsUrl = 'api/event';  // URL to web API
@@ -44,6 +43,7 @@ export class EventService {
 	}
 	
 	private post(event: Event): Observable<Event>{
+		this.token = localStorage.getItem('token');
 		let body = JSON.stringify(event);
 		let headers = new Headers();
 		headers.append('Content-Type', 'application/json');
@@ -55,6 +55,7 @@ export class EventService {
 	}
 	
 	private put(event: Event){
+		this.token = localStorage.getItem('token');
 		let body = JSON.stringify(event);
 		let headers = new Headers();
 		headers.append('Content-Type', 'application/json');

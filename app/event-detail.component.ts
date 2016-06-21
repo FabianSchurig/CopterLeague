@@ -65,7 +65,7 @@ export class EventDetailComponent implements OnInit, AfterViewInit {
 		this.event = new Object();
 		this.event.title = 'Neue Veranstaltung';
 		this.event.date = now.toISOString();
-		this.event.id = null;
+		this.event.notes = '';
 		this.isNew = true;
 		this.active = false;
 		setTimeout(()=> this.active=true, 0);

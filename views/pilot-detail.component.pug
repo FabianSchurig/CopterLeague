@@ -130,9 +130,12 @@ div.container( *ngIf='pilot')
 							option 3S
 							option 4S
 						div.alert.alert-danger([hidden]='battery.valid || battery.pristine') Batterietyp wird benötigt
+					div.alert.alert-dismissible.alert-custom
+						button.close(type='button', data-dismiss='alert' ) &times;
+						p Wusstest du schon: Du kannst Markdown verwenden um deine Beschreibung zu stylen.
 					div.form-group
 						label(for='notes') Beschreibung
-						textarea.form-control(type='text', [(ngModel)]='multi.notes', ngControl='notes', #notes='ngForm', rows='3')
+						textarea.form-control(type='text', [(ngModel)]='multi.notes', ngControl='notes', #notes='ngForm', rows='5')
 						div.alert.alert-danger([hidden]='notes.valid || notes.pristine') Beschreibung wird benötigt
 					button.btn.btn-success.pull-right(type='submit', [disabled]='!copterForm.form.valid') Hinzufügen
 					button.btn.btn-warning.pull-right(type='button', (click)='addCopter=false') Abbrechen

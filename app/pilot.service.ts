@@ -11,12 +11,12 @@ export class PilotService {
 	id: number;
 	
 	constructor (private http: Http) {
-		this.token = localStorage.getItem('token');
 	}
 
 	private pilotsUrl = 'api/pilot';  // URL to web API
 
 	private post(pilot: Pilot): Observable<Pilot>{
+		this.token = localStorage.getItem('token');
 		let body = JSON.stringify(pilot);
 		let headers = new Headers();
 		headers.append('Content-Type', 'application/json');
@@ -27,6 +27,7 @@ export class PilotService {
 	}
 	
 	private put(pilot: Pilot){
+		this.token = localStorage.getItem('token');
 		let body = JSON.stringify(pilot);
 		let url = `${this.pilotsUrl}/` + pilot.id;
 		let headers = new Headers();

@@ -39,9 +39,9 @@ div.container
 					p Wusstest du schon: Du kannst Markdown verwenden um deine Beschreibung zu stylen.
 				div.form-group
 					label(for='notes') Beschreibung
-					input.form-control(type='text', required [(ngModel)]='event.notes', ngControl='notes', #notes='ngForm')
+					textarea.form-control(type='text', required [(ngModel)]='event.notes', ngControl='notes', #notes='ngForm', rows='5')
 					div.alert.alert-danger([hidden]='notes.valid || notes.pristine') beschreibung wird benötigt
-				div.form-group
+				div.form-group( *ngIf='event.notes != ""')
 					h5 Vorschau deiner Beschreibung
 					div.well( [innerHTML]='event.notes | markdown' )
 				button.btn.btn-default(type='submit', [disabled]='!eventForm.form.valid') Speichern
