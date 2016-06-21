@@ -9,4 +9,5 @@ module.exports = function(app) {
     require('./pilot')(router);
     require('./event')(router);
     require('./image')(router);
+    require('./map')(router);
 };
