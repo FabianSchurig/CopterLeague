@@ -19,6 +19,8 @@ export class MapComponent implements OnInit {
 	map: string = "";
 	locations:string[][];
 	i: number = 0;
+	markers = [];
+	
 
 	
 	constructor(private mapService: MapService, private router: Router) { 
@@ -83,7 +85,7 @@ export class MapComponent implements OnInit {
 			
 			var infowindow = new google.maps.InfoWindow();
 
-			var marker, i, content;
+			var marker, i, content; 
 
 			for (i in this.locations) {	
 				var pinImage;
@@ -100,6 +102,7 @@ export class MapComponent implements OnInit {
 					title: this.locations[i][2],
 					icon: pinImage
 				});
+				this.markers.push(marker);
 				console.log(this.locations[i][1]);
 				content = this.locations[i][1];
 				
@@ -110,6 +113,11 @@ export class MapComponent implements OnInit {
 					}
 				})(marker, i, content));
 			}
+			var options = {
+				imagePath: 'images/m'
+			};
+
+			var markerCluster = new MarkerClusterer(this.map, this.markers, options);
 		});
 		
 		

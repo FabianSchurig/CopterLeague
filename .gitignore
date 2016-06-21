@@ -3,6 +3,7 @@ node_modules
 typings/
 public/*.js
 public/*.map
+!public/markerclusterer.js
 app/*.js
 app/*.js.map
 doc
