@@ -15,7 +15,6 @@ export class MapService {
 	private mapUrl = 'api/map';  // URL to web API
 
 	getMarker () {
-		console.log('getMap');
 		return this.http.get(this.mapUrl)
 					.map(this.extractData)
 					.catch(this.handleError);

@@ -46,10 +46,8 @@ export class MapComponent implements OnInit {
 		
 			for(var item of this.marker){
 				if(item.location != null) {
-					console.log(item.location);
 					this.locations[this.i] = [];
 					this.locations[this.i][0] = new google.maps.LatLng(parseFloat(item.lat),parseFloat(item.lng));
-					console.log(this.myLatLng);
 					
 					var string = '';
 					if(item.type == 'pilot'){
@@ -65,10 +63,9 @@ export class MapComponent implements OnInit {
 						'<div id="bodyContent">'+
 						'<a class="pull-right" href="/'+item.type+'/detail/'+item.id+'">'+
 						'mehr Details</a> '+
-						'<button class="pull-right btn btn-primary" (click)="gotoDetail('+item.type+','+item.id+')">'+
-						'mehr Details</button> '+
 						'</div>'+
 						'</div>';
+					//TODO: internal routing without page reload
 						
 					this.locations[this.i][2] = item.name;
 					this.locations[this.i][3] = item.id;
@@ -83,7 +80,7 @@ export class MapComponent implements OnInit {
 				new google.maps.Point(0,0),
 				new google.maps.Point(10, 34));
 			
-			var pinColorEvent = "66ffff";
+			var pinColorEvent = "6FFF00";
 			var pinImageEvent = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColorEvent,
 				new google.maps.Size(21, 34),
 				new google.maps.Point(0,0),
@@ -115,7 +112,6 @@ export class MapComponent implements OnInit {
 					icon: pinImage
 				});
 				this.markers.push(marker);
-				console.log(this.locations[i][1]);
 				content = this.locations[i][1];
 				
 				google.maps.event.addListener(marker, 'click', (function(marker, i, content) {
