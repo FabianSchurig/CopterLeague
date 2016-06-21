@@ -41,13 +41,13 @@ module.exports = function(app) {
                 res.json({
                     status: 'success',
                     data: pilots.map(row => {
-                            row = row.toJSON(); console.log(row);
+                            row = row.toJSON();
                             row.type = 'pilot';
                             row.name = row.alias;
                             row.alias = undefined;
                             return row;
                         }).concat(events.map(row => {
-                            row = row.toJSON(); console.log(row);
+                            row = row.toJSON();
                             row.type = 'event';
                             row.name = row.title;
                             row.title = undefined;
