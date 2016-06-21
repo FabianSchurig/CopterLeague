@@ -98,7 +98,7 @@ export class EventDetailComponent implements OnInit, AfterViewInit {
 		this._eventService
 			.save(this.event)
 			.subscribe(event => {
-				this.event.id = event.id;
+				this.event.id = event.data.id;
 				this.gotoSaved(this.event.id);}
 				, error => this.errorMessage = <any>error);
 			
