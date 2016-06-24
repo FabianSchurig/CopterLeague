@@ -5,9 +5,7 @@ module.exports = {
   debug: true, 
   // Einstiegspunkt in die Anwendung 
   // Erweiterung .js bzw. ts. wird weggelassen
-  entry: {
-    app: "./app/main"
-  },
+  entry: { app: ['babel-polyfill', './app/main']},
   // Legt fest, dass das Bundle im Ordner dist abzulegen
   // ist. Der Platzhalter [name] wird durch den Namen des
   // Einstiegspunktes (app) ersetzt.

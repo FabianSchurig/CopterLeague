@@ -1,3 +1,6 @@
+import 'babel-polyfill';
+import 'zone.js/dist/zone.js';
+
 import { bootstrap } from '@angular/platform-browser-dynamic';
 import { ROUTER_PROVIDERS } from '@angular/router-deprecated';
 import { HTTP_PROVIDERS }    from '@angular/http';
@@ -8,6 +11,7 @@ import { AppComponent } from './app.component';
 import { AuthService } from './auth.service';
 
 import {provide} from '@angular/core';
+
 
 bootstrap(AppComponent, [
   ROUTER_PROVIDERS,
