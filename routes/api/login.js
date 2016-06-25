@@ -7,6 +7,8 @@ const bluebird = require('bluebird');
 const compareAsync = bluebird.promisify(bcrypt.compare);
 const token = require('./token');
 const config = require('../../config');
+const request = require('request');
+const getAsync = bluebird.promisify(request.get);
 
 passport.use(new LocalStrategy({
     usernameField: 'email',
@@ -56,6 +58,52 @@ module.exports = function(app) {
             return res.status(500).json({
                 status: 'error',
                 message: 'JWT'
+            });
+        });
+    });
+
+    app.post('/auth/facebook', function(req, res) {
+        getAsync({
+            url: 'https://graph.facebook.com/v2.6/debug_token',
+            qs: {
+                input_token:  req.body.accessToken,
+                access_token:  config.facebook.clientID + '|' + config.facebook.clientSecret
+            }
+        }).then(function(httpResponse) {
+            const result = JSON.parse(httpResponse.body).data;
+            const result_is_valid = result && result.is_valid &&
+                result.app_id == config.facebook.clientID && result.user_id;
+
+            if(! result_is_valid) {
+                return bluebird.reject('INVALID_ACCESS_TOKEN');
+            }
+
+            return getAsync({
+                url: 'https://graph.facebook.com/v2.6/me',
+                qs: {
+                    fields: 'id,name,first_name,last_name',
+                    access_token: req.body.accessToken
+                }
+            });
+        }).then(function(httpResponse) {
+            const profile = JSON.parse(httpResponse.body);
+
+            return Pilot.findOrCreate({
+                where: {
+                    facebookId: profile.id
+                },
+                defaults: {
+                    alias: profile.name,
+                    firstName: profile.first_name,
+                    familyName: profile.last_name
+                }
+            });
+        }).spread(function(pilot, created) {
+            return token.login(pilot.id, res);
+        }).catch(function(err) {
+            return res.status(500).json({
+                status: 'error',
+                message: error
             });
         });
     });
