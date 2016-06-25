@@ -1,7 +1,12 @@
 const config = require('../config');
 
 module.exports = function(app) {
-	function layout(req, res) { res.render('layout', { 'googleMapsKey' : config.googleMaps.APIKey}); };
+	function layout(req, res) {
+		res.render('layout', {
+			'facebookAppId': config.facebook.clientID,
+			'googleMapsKey' : config.googleMaps.APIKey
+		});
+	};
     app.get('/', layout );
     app.get('/pilots', layout );
     app.get('/events', layout );
