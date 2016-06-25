@@ -68,15 +68,14 @@ export class LoginComponent implements OnInit {
 	}
 	
 	ngOnInit(){
-		console.log('login init')
+		var appID = $('meta[name=facebookAppId]').attr('content');
 		FB.init({
-			appId		: '1708147599444937', // TODO replace with api get appId
+			appId		: appID,
 			cookie		: true,	// enable cookies to allow the server to access 
 								// the session
 			xfbml		: true,	// parse social plugins on this page
 			version		: 'v2.2' // use version 2.2
 		});
-		console.log('init');
 
 	}
 
