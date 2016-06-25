@@ -49,6 +49,18 @@
 	margin-bottom: 20px;
 }
 
+.btn-social {
+	width: 85%;
+    text-align: center;
+    margin: auto;
+    display: block;
+    margin-top: 5px;
+}
+
+.btn-ico, .form-space {
+	margin-top: 5px;
+}
+
 .top-buffer { margin-top:20px; }
 
 .row>div {

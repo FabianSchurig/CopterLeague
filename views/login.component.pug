@@ -7,19 +7,26 @@ div( *ngIf='loggedIn' )
 
 div( *ngIf='!loggedIn' )
 	div.nav-login#nav-login
-		a.btn.btn-social.btn-facebook.navbar-right.nav-space-r.nav-space-t(scope='public_profile,email', (click)='checkLoginState()')
-			i.fa.fa-facebook
-			span Login mit Facebook
-		a.btn.btn-social.btn-google.navbar-right.nav-space-r.nav-space-t(href="/auth/google")
-			i.fa.fa-google
-			span Login mit google
-		form.navbar-form.navbar-right(role='login', name='loginForm', [ngFormModel]='form', (submit)='$event.preventDefault(); onSubmit(form.value.email, form.value.password)')
-			div( *ngIf='error') Passwort überprüfen!
-			div.form-group
-				input(class='form-control nav-space-r', type='email', required='required', name='email', spellcheck='false', placeholder='jemand@bleistift.de', ngControl='email')
-			div.form-group
-				input(class='form-control nav-space-r', type='password', required='required', name='password', placeholder='Kennwort', ngControl='password')
-			div.form-group
-				input(class='form-control', type='hidden', name='persistent', ng-model='login.persistent', value='1')
-			div.form-group
-				input(class='form-control', class='btn btn-primary', type='submit', [disabled]='!form.valid', value='Anmelden')
+		ul.nav.navbar-nav.navbar-right
+			li.dropdown
+				a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-expanded='false') Login 
+					span.caret
+				ul.dropdown-menu( role='menu' )
+					a.btn.btn-social.btn-facebook(scope='public_profile,email', (click)='checkLoginState()')
+						i.fa.fa-facebook.btn-ico
+						span Login mit Facebook
+					a.btn.btn-social.btn-google(href="/auth/google")
+						i.fa.fa-google.btn-ico
+						span Login mit Google
+					li.divider
+					li
+						form.navbar-form(role='login', name='loginForm', [ngFormModel]='form', (submit)='$event.preventDefault(); onSubmit(form.value.email, form.value.password)')
+							div( *ngIf='error') Passwort überprüfen!
+							div.form-group.form-space
+								input(class='form-control nav-space-r', type='email', required='required', name='email', spellcheck='false', placeholder='jemand@bleistift.de', ngControl='email')
+							div.form-group.form-space
+								input(class='form-control nav-space-r', type='password', required='required', name='password', placeholder='Kennwort', ngControl='password')
+							div.form-group
+								input(class='form-control', type='hidden', name='persistent', ng-model='login.persistent', value='1')
+							div.form-group.form-space(style='width: 100%;')
+								input(class='form-control', class='btn btn-primary', type='submit', [disabled]='!form.valid', value='Anmelden', style='width: 99%;')
