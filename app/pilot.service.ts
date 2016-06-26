@@ -14,22 +14,29 @@ export class PilotService {
 	}
 
 	private pilotsUrl = 'api/pilot';  // URL to web API
+	private multisUrl = 'api/multi';
 
-	private post(pilot: Pilot): Observable<Pilot>{
+	private post(obj: Object, url: string){
+		console.log('Post');
+		console.log(obj);
 		this.token = localStorage.getItem('token');
-		let body = JSON.stringify(pilot);
+		let body = JSON.stringify(obj);
+		console.log(body);
 		let headers = new Headers();
 		headers.append('Content-Type', 'application/json');
+		if(this.token != undefined){
+			headers.append('Authorization', 'Bearer '+this.token);
+		}
 
-		return this.http.post(this.pilotsUrl, body, {headers})
+		return this.http.post(url, body, {headers})
 						.map(this.extractData)
 						.catch(this.handleError);
 	}
 	
-	private put(pilot: Pilot){
+	private put(obj:Object, url: string){
 		this.token = localStorage.getItem('token');
-		let body = JSON.stringify(pilot);
-		let url = `${this.pilotsUrl}/` + pilot.id;
+		let body = JSON.stringify(obj);
+		
 		let headers = new Headers();
 		headers.append('Content-Type', 'application/json');
 		headers.append('Authorization', 'Bearer '+this.token);
@@ -41,12 +48,27 @@ export class PilotService {
 	
 	updatePilot(pilot:Pilot){
 		console.log('update pilot');
-		return this.put(pilot);
+		let url = `${this.pilotsUrl}/` + pilot.id;
+		return this.put(pilot, url);
 	}
 	
 	register(pilot:Pilot){
 		console.log('try register');
-		return this.post(pilot);
+		return this.post(pilot, this.pilotsUrl);
+	}
+	
+	saveMulti(multi: Object){
+		console.log('try saveCopter');
+		console.log(multi.id);
+		console.log(multi);
+		if(multi.id != undefined){
+			let url = `${this.multisUrl}/` + multi.id;
+			return this.put(multi, url);
+		}else{
+			let url = `${this.multisUrl}`;
+			return this.post(multi, url);
+		}
+		
 	}
 	
 	getPilots (): Observable<Pilot[]> {
@@ -57,6 +79,11 @@ export class PilotService {
 	}
 	getPilot(id: number) {
 		return this.http.get(this.pilotsUrl + '/'+id)
+					.map(this.extractData)
+					.catch(this.handleError);
+	}
+	getMultis(id: number) {
+		return this.http.get(this.multisUrl + '?pilot='+id)
 					.map(this.extractData)
 					.catch(this.handleError);
 	}
