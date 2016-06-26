@@ -57,7 +57,7 @@ const Multi = instance.define('Multi', {
     propellerSize: {type: Sequelize.INTEGER, allowNull: false},
     propellerBlades: {type: Sequelize.INTEGER, allowNull: false},
     battery: {type: Sequelize.INTEGER, allowNull: false},
-    numberOfMotors: {type: Sequelize.INTGER, allowNull: false},
+    numberOfMotors: {type: Sequelize.INTEGER, allowNull: false},
     notes: {type: Sequelize.TEXT, allowNull: false, defaultValue: ''}
 });
 

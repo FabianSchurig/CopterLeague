@@ -287,7 +287,7 @@ module.exports = function(app) {
         req.checkBody('notes').optional().isLength({max: 1000});
 
         Multi.create({
-            UserId: req.user.id,
+            PilotId: req.user.id,
             name: req.body.name,
             frameSize: req.body.frameSize,
             propellerSize: req.body.propellerSize,
@@ -301,6 +301,26 @@ module.exports = function(app) {
                 data: {
                     id: multi.id
                 }
+            });
+        }).catch(function(err) {
+            res.status(500).json({
+                status: 'error',
+                message: err
+            });
+        });
+    });
+
+    app.get('/pilot/:id/multi', function(req, res) {
+        Multi.findAll({
+            attributes: ['id', 'name', 'frameSize', 'propellerSize',
+                'propellerBlades', 'battery', 'numberOfMotors', 'notes'],
+            where: {
+                PilotId: req.params.id
+            }
+        }).then(function(multis) {
+            res.json({
+                status: 'success',
+                data: multis
             });
         }).catch(function(err) {
             res.status(500).json({
