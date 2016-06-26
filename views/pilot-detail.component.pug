@@ -111,16 +111,16 @@ div.container( *ngIf='pilot')
 							h2.panel-title {{multi.name}}
 						div
 							label Propellergröße:
-							span.pull-right {{multi.propsize}}
+							span.pull-right {{multi.propellerSize}}
 						div
 							label Rotorblätter:
-							span.pull-right {{multi.blades}}
+							span.pull-right {{multi.propellerBlades}}
 						div
 							label Motoren:
-							span.pull-right {{multi.motors}}
+							span.pull-right {{multi.numberOfMotors}}
 						div
 							label Rahmengröße:
-							span.pull-right {{multi.framesize}}
+							span.pull-right {{multi.frameSize}}
 						div
 							label Akku:
 							span.pull-right {{multi.battery}}
@@ -136,40 +136,46 @@ div.container( *ngIf='pilot')
 							input.form-control(required [(ngModel)]='multi.name', ngControl='name', #name='ngForm')
 							div.alert.alert-danger([hidden]='name.valid || name.pristine') Name wird benötigt
 						div.form-group
-							label(for='propsize') Propellergröße
-							select.form-control(required [(ngModel)]='multi.propsize', ngControl='propsize', #propsize='ngForm')
+							label(for='propellerSize') Propellergröße
+							div.input-group
+								select.form-control(required [(ngModel)]='multi.propellerSize', ngControl='propellerSize', #propellerSize='ngForm')
+									option 1
+									option 2
+									option 3
+									option 4
+									option 5
+									option 6
+								span.input-group-addon inch
+							div.alert.alert-danger([hidden]='propellerSize.valid || propellerSize.pristine') Propellergröße wird benötigt
+						div.form-group
+							label(for='frameSize') maximaler Rotorabstand
+							div.input-group
+								input.form-control(required [(ngModel)]='multi.frameSize', ngControl='frameSize', #frameSize='ngForm')
+								span.input-group-addon mm
+							div.alert.alert-danger([hidden]='frameSize.valid || frameSize.pristine') Rotorabstand wird benötigt
+						div.form-group
+							label(for='propellerBlades') Rotorblätter
+							select.form-control(required [(ngModel)]='multi.propellerBlades', ngControl='propellerBlades', #propellerBlades='ngForm')
 								option 1
 								option 2
 								option 3
 								option 4
-								option 5
-								option 6
-							div.alert.alert-danger([hidden]='propsize.valid || propsize.pristine') Propellergröße wird benötigt
+							div.alert.alert-danger([hidden]='propellerBlades.valid || propellerBlades.pristine') Rotorblätter wird benötigt
 						div.form-group
-							label(for='framesize') maximaler Rotorabstand
-							input.form-control(required [(ngModel)]='multi.framesize', ngControl='framesize', #framesize='ngForm')
-							div.alert.alert-danger([hidden]='framesize.valid || framesize.pristine') Rotorabstand wird benötigt
-						div.form-group
-							label(for='blades') Rotorblätter
-							select.form-control(required [(ngModel)]='multi.blades', ngControl='blades', #blades='ngForm')
-								option 1
-								option 2
-								option 3
-								option 4
-							div.alert.alert-danger([hidden]='blades.valid || blades.pristine') Rotorblätter wird benötigt
-						div.form-group
-							label(for='motors') Anzahl der Motoren
-							select.form-control(required [(ngModel)]='multi.motors', ngControl='motors', #motors='ngForm')
+							label(for='numberOfMotors') Anzahl der Motoren
+							select.form-control(required [(ngModel)]='multi.numberOfMotors', ngControl='numberOfMotors', #numberOfMotors='ngForm')
 								option 1
 								option 3
 								option 4
 								option 6
-							div.alert.alert-danger([hidden]='motors.valid || motors.pristine') Anzahl der Motoren wird benötigt
+							div.alert.alert-danger([hidden]='numberOfMotors.valid || numberOfMotors.pristine') Anzahl der Motoren wird benötigt
 						div.form-group
 							label(for='battery') Batterietyp
-							select.form-control(required [(ngModel)]='multi.battery', ngControl='battery', #battery='ngForm')
-								option 3
-								option 4
+							div.input-group
+								select.form-control(required [(ngModel)]='multi.battery', ngControl='battery', #battery='ngForm')
+									option 3
+									option 4
+								span.input-group-addon Zellen
 							div.alert.alert-danger([hidden]='battery.valid || battery.pristine') Batterietyp wird benötigt
 						div.alert.alert-dismissible.alert-custom
 							button.close(type='button', data-dismiss='alert' ) &times;

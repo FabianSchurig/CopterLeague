@@ -15,7 +15,7 @@ export class PilotService {
 
 	private pilotsUrl = 'api/pilot';  // URL to web API
 	private multisUrl = 'api/multi';
-
+	
 	private post(obj: Object, url: string){
 		console.log('Post');
 		console.log(obj);
@@ -58,14 +58,11 @@ export class PilotService {
 	}
 	
 	saveMulti(multi: Object){
-		console.log('try saveCopter');
-		console.log(multi.id);
-		console.log(multi);
 		if(multi.id != undefined){
 			let url = `${this.multisUrl}/` + multi.id;
 			return this.put(multi, url);
 		}else{
-			let url = `${this.multisUrl}`;
+			let url = `${this.pilotsUrl}/` + pilot.id +`/multi`;
 			return this.post(multi, url);
 		}
 		

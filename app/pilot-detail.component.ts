@@ -150,14 +150,13 @@ export class PilotDetailComponent implements OnInit {
 	
 	addNewCopter(){
 		var copter = [];
-		copter.propsize = '';
-		copter.propsize = undefined;
-		copter.blades = undefined;
-		copter.motors = undefined;
-		copter.framesize = '';
+		copter.name = '';
+		copter.propellerSize = undefined;
+		copter.propellerBlades = undefined;
+		copter.numberOfMotors = undefined;
+		copter.frameSize = '';
 		copter.battery = undefined;
 		copter.notes = '';
-		copter.pilot = this.pilot.id;
 		copter.id = undefined;
 		copter.edit = true;
 		
@@ -169,13 +168,12 @@ export class PilotDetailComponent implements OnInit {
 	editCopter(multi: Object){
 		var copter = {};
 		copter.name = multi.name;
-		copter.propsize = multi.propsize;
-		copter.blades = multi.blades;
-		copter.motors = multi.motors;
-		copter.framesize = multi.framesize;
+		copter.propellerSize = multi.propellerSize;
+		copter.propellerBlades = multi.propellerBlades;
+		copter.numberOfMotors = multi.numberOfMotors;
+		copter.frameSize = multi.frameSize;
 		copter.battery = multi.battery;
 		copter.notes = multi.notes;
-		copter.pilotID = this.pilot.id;
 		copter.id = multi.id;
 		
 		this.pilotService
