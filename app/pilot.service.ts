@@ -57,12 +57,12 @@ export class PilotService {
 		return this.post(pilot, this.pilotsUrl);
 	}
 	
-	saveMulti(multi: Object){
+	saveMulti(multi: Object, pilotID: number){
 		if(multi.id != undefined){
 			let url = `${this.multisUrl}/` + multi.id;
 			return this.put(multi, url);
 		}else{
-			let url = `${this.pilotsUrl}/` + pilot.id +`/multi`;
+			let url = `${this.pilotsUrl}/` + pilotID +`/multi`;
 			return this.post(multi, url);
 		}
 		
@@ -80,7 +80,7 @@ export class PilotService {
 					.catch(this.handleError);
 	}
 	getMultis(id: number) {
-		return this.http.get(this.multisUrl + '?pilot='+id)
+		return this.http.get(this.pilotsUrl + '/'+ id + '/multi')
 					.map(this.extractData)
 					.catch(this.handleError);
 	}

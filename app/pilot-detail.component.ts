@@ -149,7 +149,7 @@ export class PilotDetailComponent implements OnInit {
 	}
 	
 	addNewCopter(){
-		var copter = [];
+		var copter = {};
 		copter.name = '';
 		copter.propellerSize = undefined;
 		copter.propellerBlades = undefined;
@@ -177,7 +177,7 @@ export class PilotDetailComponent implements OnInit {
 		copter.id = multi.id;
 		
 		this.pilotService
-			.saveMulti(copter)
+			.saveMulti(copter, this.pilot.id)
 			.subscribe(rotor => {
 				//this.pilot = pilot;
 				this.addCopter = false;
