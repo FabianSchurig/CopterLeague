@@ -32,7 +32,7 @@ export class PilotDetailComponent implements OnInit {
 	addCopter = false;
 	errorMessage = '';
 	pilotAPI = '';
-	multi = '';
+	editMulti = '';
 	public uploader:FileUploader = new FileUploader({url: '/api/pilot/'+this.routeParams.get('id')+'/avatar'});
 	
 	public address: Object;
@@ -43,6 +43,7 @@ export class PilotDetailComponent implements OnInit {
 		private pilotService: PilotService,
 		private routeParams: RouteParams
 	) {
+		//this.pilot = [];
 		this.getPilot();
 		this.token = localStorage.getItem('token');
 		var options:FileUploaderOptions = {};
@@ -65,11 +66,27 @@ export class PilotDetailComponent implements OnInit {
 		let id = +this.routeParams.get('id');
 		this.pilotService.getPilot(id).subscribe(pilot => {
 			this.pilot = pilot.data;
+			this.getMultis();
 			if(this.pilot.id == this.id){
 				this.active = true;
 			}
 		}, error =>	this.errorMessage = <any>error);
 	}
+	
+	getMultis() {
+		this.pilot.Multis = [];
+		let id = +this.routeParams.get('id');
+		this.pilotService.getMultis(id).subscribe(multis => {
+			if(multis.data){
+				this.pilot.Multis = multis.data;
+			}else{
+				this.pilot.Multis = [];
+				console.log(this.pilot.Multis);
+			}
+			
+		}, error =>	this.errorMessage = <any>error);
+	}
+	
 	
 	edit(){
 		this.isEditable = true;
@@ -129,6 +146,47 @@ export class PilotDetailComponent implements OnInit {
 				this.isEditable = false;
 				}
 				, error => this.errorMessage = <any>error);
+	}
+	
+	addNewCopter(){
+		var copter = [];
+		copter.propsize = '';
+		copter.propsize = undefined;
+		copter.blades = undefined;
+		copter.motors = undefined;
+		copter.framesize = '';
+		copter.battery = undefined;
+		copter.notes = '';
+		copter.pilot = this.pilot.id;
+		copter.id = undefined;
+		copter.edit = true;
+		
+		this.pilot.Multis.push(copter);
+		console.log(this.pilot.Multis);
+		//this.pilot.Multis[this.pilot.Multis.length-1].edit = true;
+	}
+	
+	editCopter(multi: Object){
+		var copter = {};
+		copter.name = multi.name;
+		copter.propsize = multi.propsize;
+		copter.blades = multi.blades;
+		copter.motors = multi.motors;
+		copter.framesize = multi.framesize;
+		copter.battery = multi.battery;
+		copter.notes = multi.notes;
+		copter.pilotID = this.pilot.id;
+		copter.id = multi.id;
+		
+		this.pilotService
+			.saveMulti(copter)
+			.subscribe(rotor => {
+				//this.pilot = pilot;
+				this.addCopter = false;
+				this.getMultis();
+				}
+				, error => this.errorMessage = <any>error);
+		
 	}
 
 	goBack() {

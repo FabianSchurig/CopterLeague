@@ -103,42 +103,83 @@ div.container( *ngIf='pilot')
 				hr
 		div.row.top-buffer
 		div.row-fluid
-			div.col-md-4( *ngFor='let multi of pilot.Multis' )
-				div.panel.panel-default.panel-profile.m-b-25
+			div.col-xs-12.col-sm-6.col-md-4.col-lg-4( *ngFor='let multi of pilot.Multis' )
+				div.panel.panel-default.panel-profile.m-b-25( [hidden]='multi.edit' )
 					div.panel-heading.height-300(style='background-image: url(placeholder.png)')
 					div.panel-body
 						div
-							h2.panel-title {{multi.id}}
+							h2.panel-title {{multi.name}}
 						div
-							label Größe:
-							span.pull-right {{multi.size}}
+							label Propellergröße:
+							span.pull-right {{multi.propsize}}
+						div
+							label Rotorblätter:
+							span.pull-right {{multi.blades}}
+						div
+							label Motoren:
+							span.pull-right {{multi.motors}}
+						div
+							label Rahmengröße:
+							span.pull-right {{multi.framesize}}
 						div
 							label Akku:
 							span.pull-right {{multi.battery}}
 						div
 							label Beschreibung: 
-							p {{multi.notes}}
-			div.col-md-4([hidden]='!addCopter')
-				form( (ngSubmit)='onSubmit()', #copterForm='ngForm' )
-					div.form-group
-						label(for='size') maximaler Rotorabstand in mm
-						input.form-control(required [(ngModel)]='multi.size', ngControl='size', #size='ngForm')
-						div.alert.alert-danger([hidden]='size.valid || size.pristine') Rotorabstand wird benötigt
-					div.form-group
-						label(for='battery') Batterietyp
-						select.form-control(required [(ngModel)]='multi.battery', ngControl='battery', #battery='ngForm')
-							option 3S
-							option 4S
-						div.alert.alert-danger([hidden]='battery.valid || battery.pristine') Batterietyp wird benötigt
-					div.alert.alert-dismissible.alert-custom
-						button.close(type='button', data-dismiss='alert' ) &times;
-						p Wusstest du schon: Du kannst Markdown verwenden um deine Beschreibung zu stylen.
-					div.form-group
-						label(for='notes') Beschreibung
-						textarea.form-control(type='text', [(ngModel)]='multi.notes', ngControl='notes', #notes='ngForm', rows='5')
-						div.alert.alert-danger([hidden]='notes.valid || notes.pristine') Beschreibung wird benötigt
-					button.btn.btn-success.pull-right(type='submit', [disabled]='!copterForm.form.valid') Hinzufügen
-					button.btn.btn-warning.pull-right(type='button', (click)='addCopter=false') Abbrechen
+							div( [innerHTML]='multi.notes | markdown')
+						div
+							button.btn.btn-default( [class.hidden]='!active || isEditable || multi.edit', (click)='multi.edit=true' ) Copter Bearbeiten
+				div([hidden]='!multi.edit')
+					form( (ngSubmit)='editCopter(multi)', #copterForm='ngForm' )
+						div.form-group
+							label(for='name') Name
+							input.form-control(required [(ngModel)]='multi.name', ngControl='name', #name='ngForm')
+							div.alert.alert-danger([hidden]='name.valid || name.pristine') Name wird benötigt
+						div.form-group
+							label(for='propsize') Propellergröße
+							select.form-control(required [(ngModel)]='multi.propsize', ngControl='propsize', #propsize='ngForm')
+								option 1
+								option 2
+								option 3
+								option 4
+								option 5
+								option 6
+							div.alert.alert-danger([hidden]='propsize.valid || propsize.pristine') Propellergröße wird benötigt
+						div.form-group
+							label(for='framesize') maximaler Rotorabstand
+							input.form-control(required [(ngModel)]='multi.framesize', ngControl='framesize', #framesize='ngForm')
+							div.alert.alert-danger([hidden]='framesize.valid || framesize.pristine') Rotorabstand wird benötigt
+						div.form-group
+							label(for='blades') Rotorblätter
+							select.form-control(required [(ngModel)]='multi.blades', ngControl='blades', #blades='ngForm')
+								option 1
+								option 2
+								option 3
+								option 4
+							div.alert.alert-danger([hidden]='blades.valid || blades.pristine') Rotorblätter wird benötigt
+						div.form-group
+							label(for='motors') Anzahl der Motoren
+							select.form-control(required [(ngModel)]='multi.motors', ngControl='motors', #motors='ngForm')
+								option 1
+								option 3
+								option 4
+								option 6
+							div.alert.alert-danger([hidden]='motors.valid || motors.pristine') Anzahl der Motoren wird benötigt
+						div.form-group
+							label(for='battery') Batterietyp
+							select.form-control(required [(ngModel)]='multi.battery', ngControl='battery', #battery='ngForm')
+								option 3
+								option 4
+							div.alert.alert-danger([hidden]='battery.valid || battery.pristine') Batterietyp wird benötigt
+						div.alert.alert-dismissible.alert-custom
+							button.close(type='button', data-dismiss='alert' ) &times;
+							p Wusstest du schon: Du kannst Markdown verwenden um deine Beschreibung zu stylen.
+						div.form-group
+							label(for='notes') Beschreibung
+							textarea.form-control(type='text', [(ngModel)]='multi.notes', ngControl='notes', #notes='ngForm', rows='5')
+							div.alert.alert-danger([hidden]='notes.valid || notes.pristine') Beschreibung wird benötigt
+						button.btn.btn-success.pull-right(type='submit', [disabled]='!copterForm.form.valid') Speichern
+						button.btn.btn-warning.pull-right(type='button', (click)='multi.edit=false;getMultis()') Abbrechen
 		div.row
 			div.col-md-12
 				h3 #Teilgenommene Events {{pilot.Events?.length}}
@@ -157,4 +198,4 @@ div.container( *ngIf='pilot')
 	div
 		button.btn.btn-primary( (click)='goBack()' ) Zurück
 		button.btn.btn-default.pull-right( [class.hidden]='!active || isEditable || addCopter', (click)='isEditable=true; loadPlaces()' ) Profil Bearbeiten
-		button.btn.btn-success.pull-right( [class.hidden]='!active || isEditable || addCopter', (click)='addCopter=true') Copter Hinzufügen
+		button.btn.btn-success.pull-right( [class.hidden]='!active || isEditable || addCopter', (click)='addNewCopter()') Copter Hinzufügen
