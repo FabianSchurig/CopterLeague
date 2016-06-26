@@ -1,6 +1,7 @@
 const instance = require('../../models').instance;
 const Pilot = instance.model('Pilot');
 const Image = instance.model('Image');
+const Multi = instance.model('Multi');
 const bcrypt = require('bcryptjs');
 const bluebird = require('bluebird');
 const hashAsync = bluebird.promisify(bcrypt.hash);
@@ -239,6 +240,66 @@ module.exports = function(app) {
                 status: 'success',
                 data: {
                     id: req.params.id
+                }
+            });
+        }).catch(function(err) {
+            res.status(500).json({
+                status: 'error',
+                message: err
+            });
+        });
+    });
+
+    /**
+     * @api {post} /pilot/:id/multi Create Multi for Pilot
+     * @apiName PostPilotIdMulti
+     * @apiGroup Pilot
+     *
+     * @apiParam {String}             name Copter name
+     * @apiParam {Number{1-1000}}     frameSize Size of frame
+     * @apiParam {Number{1-300}}      propellerSize Size of propellers
+     * @apiParam {Number{2-5}}        propellerBlades Number of blades per propeller
+     * @apiParam {Number{3-4}}        battery Battery type, 3S or 4S
+     * @apiParam {Number{3-6}}        numberOfMotors Number of active motors
+     * @apiParam {String}             notes
+     *
+     * @apiError {String} status  "fail" / "error"
+     * @apiError {Object} message Error Message
+     *
+     * @apiSuccess {String} status  "success"
+     * @apiSuccess {Object} data    Multi
+     * @apiSuccess {Number} data.id Multi ID
+     */
+    app.post('/pilot/:id/multi', passport.authenticate('bearer', {session: false}), function(req, res) {
+        if(! (req.user && ('' + req.user.id) === req.params.id)) {
+            return res.status(403).json({
+                status: 'fail',
+                message: 'AUTH'
+            });
+        }
+
+        req.checkBody('name').isLength({max: 200});
+        req.checkBody('frameSize').isInt({min: 1, max: 1000});
+        req.checkBody('propellerSize').isInt({min: 1, max: 300});
+        req.checkBody('propellerBlades').isInt({min: 2, max: 5});
+        req.checkBody('battery').isInt({min: 3, max: 4});
+        req.checkBody('numberOfMotors').isInt({min: 3, max: 6});
+        req.checkBody('notes').optional().isLength({max: 1000});
+
+        Multi.create({
+            UserId: req.user.id,
+            name: req.body.name,
+            frameSize: req.body.frameSize,
+            propellerSize: req.body.propellerSize,
+            propellerBlades: req.body.propellerBlades,
+            battery: req.body.battery,
+            numberOfMotors: req.body.numberOfMotors,
+            notes: req.body.notes
+        }).then(function(multi) {
+            res.json({
+                status: 'success',
+                data: {
+                    id: multi.id
                 }
             });
         }).catch(function(err) {

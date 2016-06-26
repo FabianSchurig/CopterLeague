@@ -52,8 +52,12 @@ const Result = instance.define('Result', {
 });
 
 const Multi = instance.define('Multi', {
-    size: {type: Sequelize.INTEGER, allowNull: false},
+    name: {type: Sequelize.STRING, allowNull: false},
+    frameSize: {type: Sequelize.INTEGER, allowNull: false},
+    propellerSize: {type: Sequelize.INTEGER, allowNull: false},
+    propellerBlades: {type: Sequelize.INTEGER, allowNull: false},
     battery: {type: Sequelize.INTEGER, allowNull: false},
+    numberOfMotors: {type: Sequelize.INTGER, allowNull: false},
     notes: {type: Sequelize.TEXT, allowNull: false, defaultValue: ''}
 });
 
