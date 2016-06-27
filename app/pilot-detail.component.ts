@@ -35,6 +35,7 @@ export class PilotDetailComponent implements OnInit {
 	public uploader:FileUploader = new FileUploader({url: '/api/pilot/'+this.routeParams.get('id')+'/image'});
 	personalImages = false;
 	public hasBaseDropZoneOver:boolean = false;
+	images = [];
 	
 	public address: Object;
 	
@@ -88,6 +89,16 @@ export class PilotDetailComponent implements OnInit {
 		}, error =>	this.errorMessage = <any>error);
 	}
 	
+	getImages(){
+		this.images = [];
+		let id = +this.routeParams.get('id');
+		this.pilotService.getImages(id).subscribe(images => {
+			if(images.data){
+				this.images = images.data;
+			}
+			
+		}, error =>	this.errorMessage = <any>error);
+	}
 	
 	edit(){
 		this.isEditable = true;
@@ -139,6 +150,7 @@ export class PilotDetailComponent implements OnInit {
 		uPilot.location = this.pilot.location;
 		uPilot.lat = this.pilot.lat;
 		uPilot.lng = this.pilot.lng;
+		uPilot.avatar = this.pilot.avatar;
 		
 		this.pilotService
 			.updatePilot(uPilot)

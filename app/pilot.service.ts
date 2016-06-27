@@ -68,6 +68,14 @@ export class PilotService {
 		
 	}
 	
+	getImages (id: number){
+		var url = `${this.pilotsUrl}/` + id + '/image';
+		console.log(url);
+		return this.http.get(url)
+					.map(this.extractData)
+					.catch(this.handleError);
+	}
+	
 	getPilots (): Observable<Pilot[]> {
 		console.log('getPilots');
 		return this.http.get(this.pilotsUrl)
