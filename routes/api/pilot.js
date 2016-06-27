@@ -1,6 +1,6 @@
 const instance = require('../../models').instance;
 const Pilot = instance.model('Pilot');
-const Image = instance.model('Image');
+const PilotImage = instance.model('PilotImage');
 const Multi = instance.model('Multi');
 const bcrypt = require('bcryptjs');
 const bluebird = require('bluebird');
@@ -8,6 +8,7 @@ const hashAsync = bluebird.promisify(bcrypt.hash);
 const token = require('./token');
 const passport = require('passport');
 const common = require('./common');
+const config = require('../../config');
 
 const BCRYPT_ROUNDS = 10;
 
@@ -32,22 +33,20 @@ module.exports = function(app) {
      */
     app.get('/pilot', function(req, res) {
         Pilot.findAll({
-            attributes: ['id', 'alias', 'firstName', 'familyName']
+            attributes: ['id', 'alias', 'firstName', 'familyName', 'avatar']
         }).then(function(pilots) {
-            return bluebird.all(pilots.map(pilot => pilot.getImages({
-                order: [['createdAt', 'DESC']],
-                limit: 1
-            }))).then(function(images) {
-                res.json({
-                    status: 'success',
-                    data: pilots.map((pilot, index) => {
-                        pilot = pilot.toJSON();
-                        if(images[index].length > 0) {
-                            pilot.avatar = common.imageObject(images[index][0]);
-                        }
-                        return pilot;
-                    })
-                });
+            res.json({
+                status: 'success',
+                data: pilots.map(pilot => {
+                    pilot = pilot.toJSON();
+                    if(pilot.avatar) {
+                        pilot.avatar = {
+                            small: config.s3.base + '/' + pilot.avatar + '_s.jpg',
+                            medium: config.s3.base + '/' + pilot.avatar + '_m.jpg'
+                        };
+                    }
+                    return pilot;
+                })
             });
         }).catch(function(err) {
             console.log(err);
@@ -138,15 +137,7 @@ module.exports = function(app) {
     app.get('/pilot/:id', function(req, res) {
         Pilot.findById(req.params.id, {
             attributes: ['id', 'alias', 'firstName', 'familyName', 'notes',
-                'telephone', 'location', 'lat', 'lng'],
-            include: [
-                {
-                    model: Image,
-                    required: false,
-                }
-            ],
-            limit: 1,
-            order: [[Image, 'createdAt', 'DESC']]
+                'telephone', 'location', 'lat', 'lng', 'avatar']
         }).then(function(pilot) {
             if(! pilot) {
                 return res.status(404).json({
@@ -156,10 +147,12 @@ module.exports = function(app) {
             }
 
             pilot = pilot.toJSON();
-            if(pilot.Images.length > 0) {
-                pilot.avatar = common.imageObject(pilot.Images[0]);
+            if(pilot.avatar) {
+                pilot.avatar = {
+                    small: config.s3.base + '/' + pilot.avatar + '_s.jpg',
+                    medium: config.s3.base + '/' + pilot.avatar + '_m.jpg'
+                };
             }
-            pilot.Images = undefined;
 
             res.json({
                 status: 'success',
@@ -186,6 +179,7 @@ module.exports = function(app) {
      * @apiParam {String}          location
      * @apiParam {Number}          lat
      * @apiParam {Number}          lng
+     * @apiParam {String}          avatar Image ID
      *
      * @apiError {String} status  "fail" / "error"
      * @apiError {Object} message Error Message
@@ -208,6 +202,7 @@ module.exports = function(app) {
         req.checkBody('location').optional().isLength({min: 1});
         req.checkBody('lat').optional().isFloat({min: -90, max: 90});
         req.checkBody('lng').optional().isFloat({min: -180, max: 180});
+        req.checkBody('avatar').optional().isUUID();
 
         req.sanitizeBody('telephone').whitelist('0123456789/+ ');
         req.sanitizeBody('lat').toFloat();
@@ -224,7 +219,7 @@ module.exports = function(app) {
 
         Pilot.update(req.body, {
             fields: ['alias', 'familyName', 'firstName', 'notes', 'telephone',
-                'location', 'lat', 'lng'],
+                'location', 'lat', 'lng', 'avatar'],
             where: {
                 id: req.params.id
             }
@@ -262,6 +257,7 @@ module.exports = function(app) {
      * @apiParam {Number{3-4}}        battery Battery type, 3S or 4S
      * @apiParam {Number{3-6}}        numberOfMotors Number of active motors
      * @apiParam {String}             notes
+     * @apiParam {String}             image Image ID
      *
      * @apiError {String} status  "fail" / "error"
      * @apiError {Object} message Error Message
@@ -285,6 +281,7 @@ module.exports = function(app) {
         req.checkBody('battery').isInt({min: 3, max: 4});
         req.checkBody('numberOfMotors').isInt({min: 3, max: 6});
         req.checkBody('notes').optional().isLength({max: 1000});
+        req.checkBody('image').optional().isUUID();
 
         Multi.create({
             PilotId: req.user.id,
@@ -294,7 +291,8 @@ module.exports = function(app) {
             propellerBlades: req.body.propellerBlades,
             battery: req.body.battery,
             numberOfMotors: req.body.numberOfMotors,
-            notes: req.body.notes
+            notes: req.body.notes,
+            image: req.body.image
         }).then(function(multi) {
             res.json({
                 status: 'success',
@@ -313,14 +311,23 @@ module.exports = function(app) {
     app.get('/pilot/:id/multi', function(req, res) {
         Multi.findAll({
             attributes: ['id', 'name', 'frameSize', 'propellerSize',
-                'propellerBlades', 'battery', 'numberOfMotors', 'notes'],
+                'propellerBlades', 'battery', 'numberOfMotors', 'notes', 'image'],
             where: {
                 PilotId: req.params.id
             }
         }).then(function(multis) {
             res.json({
                 status: 'success',
-                data: multis
+                data: multis.map(multi => {
+                    multi = multi.toJSON();
+                    if(multi.image) {
+                        multi.image = {
+                            small: config.s3.base + '/' + multi.image + '_s.jpg',
+                            medium: config.s3.base + '/' + multi.image + '_m.jpg'
+                        };
+                    }
+                    return pilot;
+                })
             });
         }).catch(function(err) {
             res.status(500).json({

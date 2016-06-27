@@ -11,8 +11,7 @@ const upload = multer({
 const config = require('../../config');
 const bluebird = require('bluebird');
 const instance = require('../../models').instance;
-const Image = instance.model('Image');
-const ImageAvatar = instance.model('ImageAvatar');
+const PilotImage = instance.model('PilotImage');
 const passport = require('passport');
 
 const s3 = new AWS.S3({region: config.s3.region});
@@ -54,7 +53,30 @@ function processImage(image, basename, suffix, width, height) {
 }
 
 module.exports = function(app) {
-    app.post('/pilot/:id/avatar',
+    app.get('/pilot/:id/image', function(req, res) {
+        PilotImage.findAll({
+           where: {
+               UploaderId: req.params.id
+           }
+       }).then(function(images) {
+           res.json({
+               status: 'success',
+               data: images.map(image => {
+                   return {
+                       small: config.s3.base + '/' + image.id + '_s.jpg',
+                       medium: config.s3.base + '/' + image.id + '_m.jpg'
+                   };
+               })
+           });
+       }).catch(function(err) {
+           res.status(500).json({
+               status: 'error',
+               message: err
+           });
+       });
+    });
+
+    app.post('/pilot/:id/image',
         passport.authenticate('bearer', {session: false}),
         upload.single('file'), function(req, res) {
 
@@ -80,23 +102,15 @@ module.exports = function(app) {
                     processImage(image, basename, 's', 80, 80),
                     processImage(image, basename, 'm', 400, 400)
                 ]).then(function() {
-                    return Image.create({
+                    return PilotImage.create({
                         id: basename,
-                        small: true,
-                        medium: true,
                         UploaderId: req.user.id,
-                    });
-                }).then(function() {
-                    return ImageAvatar.create({
-                        ImageId: basename,
-                        PilotId: req.user.id
                     });
                 }).then(function() {
                     res.json({
                         status: 'success',
                         data: {
-                            small: config.s3.base + '/' + buildFileName(basename, 's'),
-                            medium: config.s3.base + '/' + buildFileName(basename, 'm')
+                            id: basename
                         }
                     });
                 });
