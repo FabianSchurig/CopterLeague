@@ -13,6 +13,7 @@ const bluebird = require('bluebird');
 const instance = require('../../models').instance;
 const PilotImage = instance.model('PilotImage');
 const passport = require('passport');
+const common = require('./common');
 
 const s3 = new AWS.S3({region: config.s3.region});
 
@@ -115,7 +116,7 @@ module.exports = function(app) {
             });
         }
 
-        lwip.open(req.file.buffer, 'jpg', function(err, image) {
+        lwip.open(req.file.buffer, common.imageTypeFromFile(req.file), function(err, image) {
             if(err) {
                 return res.status(500).json({
                     status: 'error',
