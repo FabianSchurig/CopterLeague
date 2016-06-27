@@ -25,7 +25,8 @@ const Pilot = instance.define('Pilot', {
     password: {type: Sequelize.STRING},
     emailConfirmed: {type: Sequelize.BOOLEAN},
     emailConfirmToken: {type: Sequelize.UUID, unique: true},
-    admin: {type: Sequelize.BOOLEAN, allowNull: false, defaultValue: false}
+    admin: {type: Sequelize.BOOLEAN, allowNull: false, defaultValue: false},
+    avatar: {type: Sequelize.UUID}
 });
 
 const Event = instance.define('Event', {
@@ -58,22 +59,16 @@ const Multi = instance.define('Multi', {
     propellerBlades: {type: Sequelize.INTEGER, allowNull: false},
     battery: {type: Sequelize.INTEGER, allowNull: false},
     numberOfMotors: {type: Sequelize.INTEGER, allowNull: false},
-    notes: {type: Sequelize.TEXT, allowNull: false, defaultValue: ''}
+    notes: {type: Sequelize.TEXT, allowNull: false, defaultValue: ''},
+    image: {type: Sequelize.UUID}
 });
 
 const Participation = instance.define('Participation', {
     isCreator: {type: Sequelize.BOOLEAN, allowNull: false}
 });
 
-const Image = instance.define('Image', {
-    id: {type: Sequelize.UUID, allowNull: false, primaryKey: true},
-    small: {type: Sequelize.BOOLEAN, allowNull: false, defaultValue: false},
-    medium: {type: Sequelize.BOOLEAN, allowNull: false, defaultValue: false},
-    large: {type: Sequelize.BOOLEAN, allowNull: false, defaultValue: false}
-});
-
-const ImageAvatar = instance.define('ImageAvatar', {}, {
-    timestamps: false
+const PilotImage = instance.define('PilotImage', {
+    id: {type: Sequelize.UUID, allowNull: false, primaryKey: true}
 });
 
 // Associations
@@ -89,7 +84,4 @@ Result.belongsTo(Multi, {foreignKey: {allowNull: false}, onDelete: 'CASCADE'});
 Race.belongsTo(Event, {foreignKey: {allowNull: false}, onDelete: 'CASCADE'});
 Event.hasMany(Race);
 
-Pilot.belongsToMany(Image, {through: ImageAvatar});
-Image.belongsToMany(Pilot, {through: ImageAvatar});
-
-Image.belongsTo(Pilot, {as: 'Uploader', foreignKey: {allowNull: false}});
+PilotImage.belongsTo(Pilot, {as: 'Uploader', foreignKey: {allowNull: false}});
