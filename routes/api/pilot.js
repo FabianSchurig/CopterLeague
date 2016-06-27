@@ -326,7 +326,7 @@ module.exports = function(app) {
                             medium: config.s3.base + '/' + multi.image + '_m.jpg'
                         };
                     }
-                    return pilot;
+                    return multi;
                 })
             });
         }).catch(function(err) {
