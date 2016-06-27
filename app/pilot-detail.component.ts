@@ -32,8 +32,9 @@ export class PilotDetailComponent implements OnInit {
 	addCopter = false;
 	errorMessage = '';
 	pilotAPI = '';
-	editMulti = '';
-	public uploader:FileUploader = new FileUploader({url: '/api/pilot/'+this.routeParams.get('id')+'/avatar'});
+	public uploader:FileUploader = new FileUploader({url: '/api/pilot/'+this.routeParams.get('id')+'/image'});
+	personalImages = false;
+	public hasBaseDropZoneOver:boolean = false;
 	
 	public address: Object;
 	
@@ -185,6 +186,10 @@ export class PilotDetailComponent implements OnInit {
 				}
 				, error => this.errorMessage = <any>error);
 		
+	}
+	
+	public fileOverBase(e:any):void {
+		this.hasBaseDropZoneOver = e;
 	}
 
 	goBack() {

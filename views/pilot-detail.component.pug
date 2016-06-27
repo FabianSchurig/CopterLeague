@@ -1,18 +1,43 @@
 div.container( *ngIf='pilot')
-	div( [hidden]='!isEditable')
+	div( [hidden]='!personalImages' )
 		div.row
-			div.col-lg-6
+			div.col-lg-12
+				div.well.my-drop-zone.height-300(ng2FileDrop, [ngClass]='{"nv-file-over": hasBaseDropZoneOver}', (fileOver)='fileOverBase($event)', [uploader]='uploader')
+					span.centered Drag n Drop Bilder
 				div.input-group
 					label.input-group-btn
-						span.btn.btn-default.btn-file Profilbild auswählen
-							input(type='file', ng2FileSelect, [uploader]='uploader', style='display: none;', accept='image/*')
-					div( *ngFor='let item of uploader.queue')
-						input.form-control( *ngIf='uploader.getIndexOfItem(item) == uploader.queue.length-1', type='text', readonly, [value]='item?.file?.name')
-			div.col-lg-6
-				button.btn.btn-success.pull-right(type='button', (click)='uploadLast()', [disabled]='!uploader.getNotUploadedItems().length') Upload
+						span.btn.btn-default.btn-file Bilder auswählen
+							input(type='file', ng2FileSelect, [uploader]='uploader', style='display: none;', accept='image/*', multiple)
 		div.row
-			div.progress( *ngFor='let item of uploader.queue')
-				div.progress-bar(*ngIf='uploader.getIndexOfItem(item) == uploader.queue.length-1', role='progressbar', [ngStyle]='{ "width": item.progress + "%" }')
+			div.col-lg-12
+				div.table
+					thead
+						tr
+							th( style='width: 50%;' ) Name
+							th( style='width: 50%;' ) Fortschritt
+							th Status
+					tbody
+						tr( *ngFor='let item of uploader.queue')
+							td {{item?.file?.name}}
+							td
+								div.progress
+									div.progress-bar(role='progress', [ngStyle]='{ "width": item.progress + "%"}')
+							td.text-center
+								span(*ngIf='item.isSuccess')
+									i.glyphicon.glyphicon-ok
+								span(*ngIf='item.isCancel')
+									i.glyphicon.glyphicon-ban-circle
+								span(*ngIf='item.isError')
+									i.glyphicon.glyphicon-remove
+		div.row
+			div.col-lg-12
+				div.progress
+					div.progress-bar(role='progress', [ngStyle]='{ "width": uploader.progress + "%"}')
+		div.row
+			div.col-lg-12
+				button.btn.btn-success.pull-right(type='button', (click)='uploader.uploadAll()', [disabled]='!uploader.getNotUploadedItems().length', style='margin-left:10px;') Upload
+				button.btn.btn-warning.pull-right(type='button', (click)='personalImages=false;uploader.clearQueue();' ) Abbrechen
+	div( [hidden]='!isEditable || personalImages')
 		div.row.top-buffer
 		form( (ngSubmit)='onSubmit()', #pilotForm='ngForm' )
 			div.form-group
@@ -60,7 +85,7 @@ div.container( *ngIf='pilot')
 					button.btn.btn-default.pull-right(type='submit', [disabled]='!pilotForm.form.valid') Speichern
 					button.btn.btn-warning.pull-right(type='button', (click)='isEditable=false;getPilot()') Abbrechen
 			div.row.top-buffer
-	div( [hidden]='isEditable')
+	div( [hidden]='isEditable || personalImages')
 		div.row
 			div.col-md-12
 				h2 {{pilot.alias}}
@@ -203,5 +228,6 @@ div.container( *ngIf='pilot')
 				td
 	div
 		button.btn.btn-primary( (click)='goBack()' ) Zurück
-		button.btn.btn-default.pull-right( [class.hidden]='!active || isEditable || addCopter', (click)='isEditable=true; loadPlaces()' ) Profil Bearbeiten
-		button.btn.btn-success.pull-right( [class.hidden]='!active || isEditable || addCopter', (click)='addNewCopter()') Copter Hinzufügen
+		button.btn.btn-default.pull-right( [class.hidden]='!active || isEditable || addCopter || personalImages', (click)='isEditable=true; loadPlaces()', style='margin-left:10px;' ) Profil Bearbeiten
+		button.btn.btn-success.pull-right( [class.hidden]='!active || isEditable || addCopter || personalImages', (click)='addNewCopter()', style='margin-left:10px;') Copter Hinzufügen
+		button.btn.btn-default.pull-right( [class.hidden]='!active || isEditable || addCopter || personalImages', (click)='personalImages=true;', style='margin-left:10px;') Bilder
