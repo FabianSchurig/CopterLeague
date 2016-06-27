@@ -53,6 +53,20 @@ function processImage(image, basename, suffix, width, height) {
 }
 
 module.exports = function(app) {
+    /**
+     * @api {get} /pilot/:id/image Get Pilot Images
+     * @apiName GetPilotIdImage
+     * @apiGroup Pilot
+     *
+     * @apiError {String} status  "fail" / "error"
+     * @apiError {Object} message Error Message
+     *
+     * @apiSuccess {String}     status       "success"
+     * @apiSuccess {Object[]}   data         Image List
+     * @apiSuccess {String}     data.id      Image ID
+     * @apiSuccess {String}     data.small   Small Image URL (80x80)
+     * @apiSuccess {String}     data.medium  Medium Image URL (400x400)
+     */
     app.get('/pilot/:id/image', function(req, res) {
         PilotImage.findAll({
            where: {
@@ -63,6 +77,7 @@ module.exports = function(app) {
                status: 'success',
                data: images.map(image => {
                    return {
+                       id: image.id,
                        small: config.s3.base + '/' + image.id + '_s.jpg',
                        medium: config.s3.base + '/' + image.id + '_m.jpg'
                    };
@@ -76,6 +91,19 @@ module.exports = function(app) {
        });
     });
 
+    /**
+     * @api {post} /pilot/:id/image Upload Pilot Image
+     * @apiName PostPilotIdImage
+     * @apiGroup Pilot
+     *
+     * @apiPermission user
+     *
+     * @apiParam {File} file Image file, as multipart/form-data
+     *
+     * @apiSuccess {String} status "success"
+     * @apiSuccess {Object} data Image
+     * @apiSuccess {Number} data.id Image ID
+     */
     app.post('/pilot/:id/image',
         passport.authenticate('bearer', {session: false}),
         upload.single('file'), function(req, res) {
