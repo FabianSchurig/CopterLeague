@@ -34,4 +34,7 @@ module.exports = function(app) {
 	app.get('/register.component.pug', function(req, res) {
 	res.render('register.component.pug');
 	});
+	app.get('/pilot-images.component.pug', function(req, res) {
+	res.render('pilot-images.component.pug');
+	});
 };

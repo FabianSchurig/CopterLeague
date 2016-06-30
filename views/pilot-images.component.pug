@@ -1,0 +1,43 @@
+div()
+	div.row
+		div.col-md-12
+			h4 Ein Bild auswählen:
+			span( *ngFor='let image of images')
+				img(src='{{image?.small}}', (click)='select(image)', [class.img-selected]='image?.selected')
+	div.row
+		div.col-lg-12
+			div.well.my-drop-zone.height-300(ng2FileDrop, [ngClass]='{"nv-file-over": hasBaseDropZoneOver}', (fileOver)='fileOverBase($event)', [uploader]='uploader')
+				span.centered Drag n Drop Bilder
+			div.input-group
+				label.input-group-btn
+					span.btn.btn-default.btn-file Bilder auswählen
+						input(type='file', ng2FileSelect, [uploader]='uploader', style='display: none;', accept='image/*', multiple)
+	div.row
+		div.col-lg-12
+			div.table
+				thead
+					tr
+						th( style='width: 50%;' ) Name
+						th( style='width: 50%;' ) Fortschritt
+						th Status
+				tbody
+					tr( *ngFor='let item of uploader.queue')
+						td {{item?.file?.name}}
+						td
+							div.progress
+								div.progress-bar(role='progress', [ngStyle]='{ "width": item.progress + "%"}')
+						td.text-center
+							span(*ngIf='item.isSuccess')
+								i.glyphicon.glyphicon-ok
+							span(*ngIf='item.isCancel')
+								i.glyphicon.glyphicon-ban-circle
+							span(*ngIf='item.isError')
+								i.glyphicon.glyphicon-remove
+	div.row
+		div.col-lg-12
+			div.progress
+				div.progress-bar(role='progress', [ngStyle]='{ "width": uploader.progress + "%"}')
+	div.row
+		div.col-lg-12
+			button.btn.btn-success.pull-right(type='button', (click)='upload();', [disabled]='!uploader.getNotUploadedItems().length', style='margin-left:10px;') Upload
+			button.btn.btn-warning.pull-right(type='button', (click)='uploader.clearQueue(); cancel()' ) Upload Abbrechen

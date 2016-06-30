@@ -146,6 +146,10 @@
 	object-fit: cover;
 }
 
+.img-selected {
+	border: 2px solid #7BFF00;
+}
+
 .centered {
 	text-align: center;
 	display: block;

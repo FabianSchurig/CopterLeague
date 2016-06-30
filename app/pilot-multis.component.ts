@@ -1,30 +1,30 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { RouteParams, RouteConfig } from '@angular/router-deprecated';
+import { RouteParams } from '@angular/router-deprecated';
 import { HTTP_PROVIDERS }		from '@angular/http';
 import { NgForm }		from '@angular/common';
 
 import { Pilot } from './pilot';
 import { PilotService } from './pilot.service';
-import { PilotImagesComponent } from './pilot-images.component';
 
 import { Iso8601ToDatePipe } from './iso8601.pipe';
 import { MarkdownPipe } from './markdown.pipe';
 import { isLoggedin, pilotId } from './is-loggedin';
 import 'rxjs/Rx';
 import * as moment from 'moment';
+import { FILE_UPLOAD_DIRECTIVES, FileSelectDirective, FileDropDirective, FileUploader } from 'ng2-file-upload/ng2-file-upload';
 
 declare var google: any;
 
 @Component({
 	selector: 'my-pilot-detail',
 	templateUrl: 'pilot-detail.component.pug',
-	directives: [PilotImagesComponent],
+	directives: [FILE_UPLOAD_DIRECTIVES],
 	pipes: [Iso8601ToDatePipe, MarkdownPipe]
 })
-/*@RouteConfig([
+@RouteConfig([
 	{path: '/images', name: 'PilotImages', component: PilotImagesComponent},
 	{path: '/multi', name: 'PilotMultis', component: PilotMultisComponent}
-])*/
+])
 export class PilotDetailComponent implements OnInit {
 	pilot: Pilot;
 	error = false;
@@ -36,7 +36,10 @@ export class PilotDetailComponent implements OnInit {
 	addCopter = false;
 	errorMessage = '';
 	pilotAPI = '';
+	public uploader:FileUploader = new FileUploader({url: '/api/pilot/'+this.routeParams.get('id')+'/image'});
 	personalImages = false;
+	public hasBaseDropZoneOver:boolean = false;
+	images = [];
 	
 	public address: Object;
 	
@@ -49,22 +52,20 @@ export class PilotDetailComponent implements OnInit {
 		//this.pilot = [];
 		this.getPilot();
 		this.token = localStorage.getItem('token');
-	}
-	
-	selectedPilotAvatar(id: string){
-		if(id != ''){
-			this.updatePilotAvatar(id);
-		}
-		this.personalImages = false;
-		this.getPilot();
-	}
-	
-	selectedMultiImage(id: string, multi: Object){
-		multi.image = id;
+		var options:FileUploaderOptions = {};
+		options.allowedFileType = 'image';
+		options.authToken = 'Bearer '+this.token;
+		this.uploader.setOptions(options);
 	}
 	
 	getLocationLink(){
 		return "https://maps.googleapis.com/maps/api/staticmap?maptype=hybrid&center="+ this.pilot.lat + ',' + this.pilot.lng +"&markers=color:blue%7C"+ this.pilot.lat +","+ this.pilot.lng +"&zoom=14&size=500x300&key=AIzaSyDv8f6roSx7xY5FS-Xb4tjTkGgG5PD9g00";
+	}
+	
+	uploadLast(){
+		var num:number = this.uploader.queue.length - 1;
+		//console.log(num);
+		this.uploader.uploadItem(this.uploader.queue[num]);
 	}
 	
 	getPilot() {
@@ -87,6 +88,18 @@ export class PilotDetailComponent implements OnInit {
 			}else{
 				this.pilot.Multis = [];
 				console.log(this.pilot.Multis);
+			}
+			
+		}, error =>	this.errorMessage = <any>error);
+	}
+	
+	getImages(){
+		this.images = [];
+		let id = +this.routeParams.get('id');
+		this.pilotService.getImages(id).subscribe(images => {
+			if(images.data){
+				this.images = images.data;
+				console.log(this.images);
 			}
 			
 		}, error =>	this.errorMessage = <any>error);
@@ -142,21 +155,7 @@ export class PilotDetailComponent implements OnInit {
 		uPilot.location = this.pilot.location;
 		uPilot.lat = this.pilot.lat;
 		uPilot.lng = this.pilot.lng;
-		
-		this.pilotService
-			.updatePilot(uPilot)
-			.subscribe(pilot => {
-				//this.pilot = pilot;
-				this.isEditable = false;
-				}
-				, error => this.errorMessage = <any>error);
-	}
-	
-	updatePilotAvatar(image: string){
-		this.pilot.avatar = image;
-		var uPilot = new Pilot();
 		uPilot.avatar = this.pilot.avatar;
-		uPilot.id = this.pilot.id;
 		
 		this.pilotService
 			.updatePilot(uPilot)
@@ -178,7 +177,6 @@ export class PilotDetailComponent implements OnInit {
 		copter.notes = '';
 		copter.id = undefined;
 		copter.edit = true;
-		copter.image = '';
 		
 		this.pilot.Multis.push(copter);
 		console.log(this.pilot.Multis);
@@ -195,7 +193,6 @@ export class PilotDetailComponent implements OnInit {
 		copter.battery = multi.battery;
 		copter.notes = multi.notes;
 		copter.id = multi.id;
-		copter.image = multi.image;
 		
 		this.pilotService
 			.saveMulti(copter, this.pilot.id)
@@ -206,6 +203,10 @@ export class PilotDetailComponent implements OnInit {
 				}
 				, error => this.errorMessage = <any>error);
 		
+	}
+	
+	public fileOverBase(e:any):void {
+		this.hasBaseDropZoneOver = e;
 	}
 
 	goBack() {
