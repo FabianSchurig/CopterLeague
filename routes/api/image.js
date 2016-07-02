@@ -15,7 +15,11 @@ const PilotImage = instance.model('PilotImage');
 const passport = require('passport');
 const common = require('./common');
 
-const s3 = new AWS.S3({region: config.s3.region});
+const s3 = new AWS.S3({
+    accessKeyId: config.s3.accessKeyId,
+    secretAccessKey: config.s3.secretAccessKey,
+    region: config.s3.region
+});
 
 function buildFileName(basename, suffix) {
     return basename + '_' + suffix + '.jpg';
